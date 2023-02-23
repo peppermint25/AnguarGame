@@ -1,1 +1,32 @@
-<p>my-game works!</p>
+<!-- <input type="text" (keypress)="onKeyPress ($event)"  ng-model="field">
+<span id="text"></span>
+<div *ngIf=" a > 5">{{name}}</div> -->
+<div class = "game" (keypress)="onKeyPress ($event)">
+    <div id="airport">
+        <div class="start-game" *ngIf="gameplay == false">
+            <h1 class="start-heading" >
+                Do you want to start the game?
+            </h1>
+            <p class="start-text">
+                Playing on map <span id="mapnumber"></span>
+            </p>
+            <button id="start-button" (click)="StartGame()" ng-model="button">Start game</button>
+        </div>
+        <div class="points">
+            <span id="ringcount">
+                0
+            </span>
+        </div>
+    </div>
+    <!-- <div class="map-div">
+        Playing on map number <span id="mapnumber">{{mapnumber}}</span>
+
+    </div> -->
+    <div class="stopwatch">
+        <span id="gametime">
+
+        </span>
+    </div>
+    <!-- <button class="refresh" onClick="window.location.reload();">Restart game</button> -->
+    <img src="assets/img/plane-right.png" id="plane">
+</div>
