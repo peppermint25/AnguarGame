@@ -35,30 +35,33 @@ export class MyGameComponent {
   }
 
   
-
   starttime = new Date();
-
-
-  playgame() {
-    while(this.gameplay == true){
-      var newtime = new Date();
-      var time = newtime.getTime() - this.starttime.getTime();
-      console.log(time);
-      setTimeout(() => {}, 1000)
-    }
-    
-  }
-
-
   
   StartGame() {
     this.gameplay = true;
+    this.starttime = new Date();
+    console.log("starttime");
     this.playgame();
     var result = this.create_maps();
     var map = result.selectedMap;
     var mapnumbered = result.mapnumber;
     console.log(mapnumbered);
   }
+
+  playgame() {
+    if(this.gameplay == true){
+      setInterval(() => {
+        var newtime = new Date();
+        var time = (newtime.getTime() - this.starttime.getTime())/1000;
+        console.log(time, "laiks");
+      }, 50)
+      }
+    
+  }
+
+
+  
+  
 
 
   // time = new Date();
@@ -106,48 +109,40 @@ export class MyGameComponent {
     return {selectedMap:selectedMap, mapnumber:mapnumber};
   };
 
-keys1(){
-  window.addEventListener("keydown", this.keysPressed);
-  window.addEventListener("keyup", this.keysReleased);
+  ngOnInit(): void {
+    window.addEventListener("keydown", this.onKeyDown.bind(this));
+    window.addEventListener("keyup", this.onKeyUp.bind(this));
+  }
 
+
+
+
+  keysPressed: {[key: number]: boolean} = {};
+  rightPress = false;
+  leftPress = false;
+
+
+onKeyDown(event: KeyboardEvent): void {
+  this.keysPressed[event.keyCode] = true;
+  if (event.keyCode === 37) {
+    console.log("Left arrow key pressed");
+  } else if (event.keyCode === 38) {
+    console.log("Up arrow key pressed");
+  } else if (event.keyCode === 39) {
+    console.log("Right arrow key pressed");
+  }
+  event.preventDefault();
 }
 
-
-
-
-keys: boolean[] = [];
-speedX  = 0;
-speedY = 0;
-rightPress = false;
-leftPress = false;
-
-keysPressed(e: KeyboardEvent): void{
-  this.keys[e.keyCode] = true;
-  if (this.keys[38]) {
-    this.speedY += 10;
-    console.log(this.speedY);
+onKeyUp(event: KeyboardEvent): void {
+  delete this.keysPressed[event.keyCode];
+  if (event.keyCode === 37) {
+    console.log("Left arrow key released");
+  } else if (event.keyCode === 38) {
+    console.log("Up arrow key released");
+  } else if (event.keyCode === 39) {
+    console.log("Right arrow key released");
   }
-  if (this.keys[39]) {
-    this.rightPress = true;
-    this.speedX += 6;
-    console.log("rightPress");
-  }
-  if (this.keys[37]) {
-    this.leftPress = true;
-    this.speedX -= 6;
-    console.log("leftPress");
-  }
-  e.preventDefault();
-}
-
-keysReleased(e: KeyboardEvent): void {
-  if (this.keys[39]) {
-    this.rightPress = false;
-  }
-  if (this.keys[37]) {
-    this.leftPress = false;
-  }
-  this.keys[e.keyCode] = false;
 }
 
 }
