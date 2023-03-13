@@ -1,11 +1,34 @@
-#plane
+/* #plane
 {
-    position: absolute;
-    top: 750px;
-    left: 300px;
-    height: 40px;
+    /* position: absolute; */
+    /* top: 750px;
+    left: 300px; */
+    /* height: 40px; */
+/* 
     z-index: 1;
+    display: block; */
+    /* border: 1px solid red; */
+    /* width: max-content; */
+    /* width: 100%; */
+/* } */
+
+#plane{
+    position: absolute;
+    top: 80%;
+    left: 30%;
+    height: 8%;
+    /* width: 100px; */
+    width: fit-content;
+    z-index: 1;
+    /* border: 1px solid red; */
+    background-image: url("plane-right.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    aspect-ratio: 10/4;
+    /* z-index: 2; */
 }
+
 body{
     caret-color: transparent;
     margin: 0px;
@@ -16,15 +39,18 @@ button{
 }
 
 #airport{
-    /* width: 1050px; */
-    display: flex;
-    height: 809px;
-    /* background-image: url("assets/img/runway.jpg"); */
+    /* display: flex; */
+    /* height: auto; */
     background-image: url("runway.jpg");
-    background-size: auto;
-    background-position: center;
-    /* padding: 0 10% 0 10% ; */
-    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: absolute;;
+    width: 100%;
+    height: 100%;
+    /* background-position: center; */
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 
 .enemy-area{
@@ -62,20 +88,23 @@ button{
     font-weight: bold;
     font-style: italic;
     color: rgba(162, 161, 161, 0.477);
-    background-color: rgba(167, 167, 167, 0);
-    opacity: 0.4;
+    opacity: 0.5;
     width: 100%;
+    height: 100%;
     /* height: 100%; */
-    margin: auto auto auto auto;
+    /* margin: auto auto auto auto; */
     display: table;
 }
 
 #ringcount {
     display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    font-size: 500px;
+    /* vertical-align: middle;
+    text-align: center; */
+    /* top: 50%;
+    left: 50%; */
+    font-size: 50vw;
     z-index: 3;
+    /* transform: translate(-50%, -50%); */
 }
 
 .refresh{
@@ -90,22 +119,6 @@ button{
     background-color: #e7e7e7; 
     color: rgb(0, 0, 0);
     z-index: 4;
-}
-
-#opaque {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    display: none;
-    background-color: black;
-    opacity: 0.3; 
-}
-
-* html #opaque {
-    position: absolute;
 }
 
 .game-win{
@@ -132,16 +145,41 @@ button{
     position: absolute;
     display: table;
     background-color: tan;
-    opacity: 0.5;
+    opacity: 0.8;
     height: 50%;
-    margin: auto;
-    left: 25%;
+    width: 50%;
+    margin: auto auto auto auto;
+    left: 50%;
+    top: 50%;
     z-index: 5;
+    /* padding: 10%; */
+    transform: translate(-50%, -50%);
+    border: 1vw solid rgb(190, 124, 37);
 }
 
 .start-game button {
-    border: 1px solid black;
+    font-size: 5vw;
+    position: absolute;
+    display: flex;
+    border: 0.3vw solid black;
     background-color: red;
+    /* justify-content: center;
+    align-items: center; */
+    left: 50%;
+    top: 80%;
+    transform: translate(-50%, -50%);
+    /* border: none; */
+    opacity: 0.8;
+}
+
+.start-game h1{
+    font-size: 7.5vw;
+    text-align: center;
+}
+
+.start-game p{
+    font-size: 5vw;
+    text-align: center;
 }
 
 .stopwatch {
