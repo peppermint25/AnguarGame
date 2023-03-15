@@ -15,6 +15,27 @@ export class MyGameComponent {
   maxPlaneY = 0;
   maxPlaneX = 0;
   gamelaunchtoken : number;
+  PlaneX = 0.3*this.airport_width;
+  PlaneY = 0.8*this.airport_height;
+  SpeedX = 0;
+  SpeedY = 0;
+  map = this.create_maps();
+  
+  mapheight = 1/ this.map.selectedMap.length;
+
+  // time units
+  starttime = new Date();
+  newtime = new Date();
+  seconds = 0;
+  minutes = 0;
+  
+
+  generate_properties : boolean = false;
+
+  public generate_coins_and_enemies (){
+    this.generate_properties = !this.generate_properties;
+  }
+
 
   constructor(){
     this.gamelaunchtoken = 1;
@@ -24,26 +45,14 @@ export class MyGameComponent {
       }
     });
   }
-
-  PlaneX = 0.3*this.airport_width;
-  PlaneY = 0.8*this.airport_height;
-  SpeedX = 0;
-  SpeedY = 0;
-
   startgame(){
-    var plane = document.getElementById('plane') as HTMLElement;
-    var airport = document.getElementById('airport') as HTMLElement;
-    // var plane_area = document.getElementById('plane_area') as HTMLElement;
-    if(!plane || !airport){
-      console.error('Can not find plane or airport');
-      return;
-    }
+    console.log(this.mapheight);
 
-    var plane_size = plane.getBoundingClientRect();
-    var airport_size = airport.getBoundingClientRect();
-    console.log("airport", airport_size, "plane", plane_size);
+    let plane = document.getElementById('plane') as HTMLElement;
+    let airport = document.getElementById('airport') as HTMLElement;
 
-    
+    let plane_size = plane.getBoundingClientRect();
+    let airport_size = airport.getBoundingClientRect();
 
     this.airport_height  = airport_size.height;
     this.airport_width = airport_size.width;
@@ -71,9 +80,9 @@ export class MyGameComponent {
   }
 
   
-  starttime = new Date();
-  
+
   StartGame() {
+    this.generate_coins_and_enemies();
     this.gameplay = true;
     this.starttime = new Date();
     this.playgame();
@@ -87,16 +96,17 @@ export class MyGameComponent {
   playgame() {
     if(this.gameplay == true){
       setInterval(() => {
-        var newtime = new Date();
-        var time = (newtime.getTime() - this.starttime.getTime())/1000;
-        // console.log(time, "laiks");
-        // console.log(this.PlaneY, this.maxPlaneY)
-        // console.log(this.PlaneX, this.maxPlaneX, this.plane_width, this.PlaneX+this.plane_width)
+        this.newtime = new Date();
+        this.seconds = (this.newtime.getTime() - this.starttime.getTime())/1000;
+        if (this.seconds >= 60){
+          this.seconds = 0;
+          this. minutes =+ 1;
+        }
+        // this.time = this.newtime-this.starttime;
       }, 50)
       }
     
   };
-
 
   plane = document.querySelector("#plane") as HTMLElement;
 
@@ -133,6 +143,7 @@ export class MyGameComponent {
         this.changeImage1;
       }
 
+      this.SpeedY = Math.min(this.SpeedY, 0.1*this.airport_height)
       this.SpeedX = Math.min(this.SpeedX, 30);
       this.SpeedX = Math.max(this.SpeedX, -30);
       // this.SpeedY = Math.max(this.SpeedY, 30);
@@ -142,15 +153,10 @@ export class MyGameComponent {
       this.PlaneY = Math.max(this.PlaneY, 0);
       this.PlaneY = Math.min(this.PlaneY, this.maxPlaneY);
 
+      console.log(this.SpeedY)
     }, 30)
     
   }
-
-  drawEnemy(x : number, y : number){
-
-  }
-
-
 
   changeImage(): void {
   const planeImage = document.getElementById("plane") as HTMLImageElement;
@@ -172,10 +178,6 @@ export class MyGameComponent {
       planeImage.src = "plane-left.png";
     }
   }
-
-
-  // time = new Date();
-
 
   create_maps()  {
     var mapselector = Math.random();
@@ -219,6 +221,8 @@ export class MyGameComponent {
     return {selectedMap:selectedMap, mapnumber:mapnumber};
   };
 
+  
+
   // all movemnt and key detection functions + image change functions
 
   ngOnInit(): void {
@@ -238,7 +242,7 @@ export class MyGameComponent {
       this.SpeedX += -15;
       this.changeImage;
     } else if (event.keyCode === 38) {
-      this.SpeedY += 15;
+      this.SpeedY += 0.01*this.airport_height;
     } else if (event.keyCode === 39) {
       this.SpeedX += 15;
       this.rightPress = true;
