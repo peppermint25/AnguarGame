@@ -13,9 +13,7 @@
             <button id="start-button" (click)="StartGame()" ng-model="button">Start game</button>
         </div>
         <div class="points">
-            <span id="ringcount">
-                0
-            </span>
+            {{score}}
         </div>
     </div>
     <div *ngIf="generate_properties">
@@ -38,5 +36,5 @@
     </div>
 
     <!-- <button class="refresh" onClick="window.location.reload();">Restart game</button> -->
-    <div id="plane" [ngClass]="getPlaneDirectionClass()"></div>
+    <div id="plane" [ngClass]="Plane_direction()" [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}"></div>
 </div>

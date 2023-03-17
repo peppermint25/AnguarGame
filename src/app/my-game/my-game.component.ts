@@ -11,19 +11,20 @@ import { interval, Subscription } from 'rxjs';
 export class MyGameComponent {
   name = 'My Game';
 
-  // variables for starting the game
+  // variables for intializing the game
   gamelaunchtoken : number;
   generate_properties : boolean = false;
   airport_height = 0;
   airport_width = 0;
   plane_height = 0;
   plane_width = 0;
+  gameplay = false;
 
 
-  PlaneX = 0.3*this.airport_width;
-  PlaneY = 0.8*this.airport_height;
-  maxPlaneY = 0;
+  PlaneX = 0;
+  PlaneY = 0;
   maxPlaneX = 0;
+  maxPlaneY = 0;
   SpeedX = 0;
   SpeedY = 0;
   map = this.create_maps();
@@ -39,7 +40,8 @@ export class MyGameComponent {
   minutes = 0;
   stopwatchSubscription: Subscription = new Subscription();
   
-
+  // displaying and keeping the score
+  score = 0;
 
 
   public generate_coins_and_enemies (){
@@ -51,11 +53,11 @@ export class MyGameComponent {
     this.gamelaunchtoken = 1;
     document.addEventListener("DOMContentLoaded", () => {
       if (this.gamelaunchtoken == 1) {
-        this.startgame();
+        this.itialize_game();
       }
     });
   }
-  startgame(){
+  itialize_game(){
     // console.log(this.mapheight);
 
     let plane = document.getElementById('plane') as HTMLElement;
@@ -70,48 +72,31 @@ export class MyGameComponent {
     this.plane_width = plane_size.width;
     this.maxPlaneX = this.airport_width - this.plane_width;
     this.maxPlaneY = this.airport_height - this.plane_height;
+    this.PlaneX = 0.3*this.airport_width;
+    this.PlaneY = 0.8*this.airport_height
   }
 
-  gameplay = false;
+
 
   onKeyPress (event: any){
-    // console.log(event.target.value);
-    // console.log(this.name, "name")
-    // // this.name = ;
-    // this.a =10;
     console.log("keypress")
   
   }
-
   
  // start game button function
   StartGame() {
     this.generate_coins_and_enemies();
     this.gameplay = true;
     this.starttime = new Date();
-    this.playGame();
+    this.game_time();
     this.gameplay_movement();
     var result = this.create_maps();
     var map = result.selectedMap;
     var mapnumbered = result.mapnumber;
-    console.log(mapnumbered);
   }
 
-  // playgame() {
-  //   if(this.gameplay == true){
-  //     setInterval(() => {
-  //       this.newtime = new Date();
-  //       this.seconds = (this.newtime.getTime() - this.starttime.getTime())/1000;
-  //       if (this.seconds >= 60){
-  //         this.seconds = 0;
-  //         this. minutes =+ 1;
-  //       }
-  //       // this.time = this.newtime-this.starttime;
-  //     }, 50)
-  //     }
-    
-  // };
-  playGame() {
+
+  game_time() {
     if (this.gameplay) {
       this.starttime = new Date();
       this.stopwatchSubscription = interval(50).subscribe(() => {
@@ -129,14 +114,11 @@ export class MyGameComponent {
   gameplay_movement(){
     setInterval(() => {
       this.plane = document.querySelector("#plane") as HTMLElement;
-      this.plane.style.top = `${this.PlaneY}px`;
-      this.plane.style.left = `${this.PlaneX}px`;
-
       this.PlaneY -= this.SpeedY;
       this.PlaneX += this.SpeedX;
 
-      this.plane.style.top = `${this.PlaneY}px`;
-      this.plane.style.left = `${this.PlaneX}px`;
+      // this.plane.style.top = `${this.PlaneY}px`;
+      // this.plane.style.left = `${this.PlaneX}px`;
       
       this.SpeedY = -0.0025*this.airport_height;
 
@@ -152,15 +134,15 @@ export class MyGameComponent {
       // Rebound from the borders
 
       if(this.PlaneX + this.plane_width == this.airport_width){
-        this.SpeedX = -0.05*this.airport_width;
+        this.SpeedX = -0.025*this.airport_width;
       }else if(this.PlaneX == 0){
-        this.SpeedX = 0.05*this.airport_width;
+        this.SpeedX = 0.025*this.airport_width;
       }
 
       if(this.PlaneY >= this.maxPlaneY){
         this.SpeedY = 0;
       }else if(this.PlaneY <= 0){
-        this.SpeedY = -0.05*this.maxPlaneY;
+        this.SpeedY = -0.025*this.maxPlaneY;
       }
 
       //lose speed when on ground
@@ -178,7 +160,9 @@ export class MyGameComponent {
     
   }
 
-  getPlaneDirectionClass() {
+  // Direction of the plane image
+
+  Plane_direction() {
     if (this.SpeedX > 0) {
       this.lastDirection = 'right';
     } else if (this.SpeedX < 0) {
@@ -187,6 +171,8 @@ export class MyGameComponent {
 
     return `plane-${this.lastDirection}`;
   }
+
+  // choses one of the 3 maps at random
 
   create_maps()  {
     var mapselector = Math.random();
@@ -247,7 +233,7 @@ export class MyGameComponent {
       this.leftPress = true;
       this.SpeedX += -15;
     } else if (event.key === "ArrowUp") {
-      this.SpeedY = 0.01*this.airport_height;
+      this.SpeedY = 0.035*this.airport_height;
     } else if (event.key === "ArrowRight") {
       this.SpeedX += 15;
       this.rightPress = true;
