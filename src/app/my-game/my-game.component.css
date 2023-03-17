@@ -17,16 +17,23 @@
     top: 80%;
     left: 30%;
     height: 4vw;
-    /* width: 100px; */
     width: fit-content;
     z-index: 1;
     /* border: 1px solid red; */
-    background-image: url("plane-right.png");
+    /* background-image: url("plane-right.png"); */
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;
     aspect-ratio: 10/4;
     /* z-index: 2; */
+}
+
+.plane-right {
+    background-image: url("plane-right.png");
+}
+
+.plane-left {
+    background-image: url("plane-left.png");
 }
 
 body{
