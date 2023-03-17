@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+// import { Component } from '@angular/core';
+
+import { Component} from '@angular/core';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-my-game',
@@ -8,29 +11,36 @@ import { Component } from '@angular/core';
 export class MyGameComponent {
   name = 'My Game';
 
+  // variables for starting the game
+  gamelaunchtoken : number;
+  generate_properties : boolean = false;
   airport_height = 0;
   airport_width = 0;
   plane_height = 0;
   plane_width = 0;
-  maxPlaneY = 0;
-  maxPlaneX = 0;
-  gamelaunchtoken : number;
+
+
   PlaneX = 0.3*this.airport_width;
   PlaneY = 0.8*this.airport_height;
+  maxPlaneY = 0;
+  maxPlaneX = 0;
   SpeedX = 0;
   SpeedY = 0;
   map = this.create_maps();
+  private lastDirection: string = 'right';
   
   mapheight = 1/ this.map.selectedMap.length;
 
   // time units
   starttime = new Date();
   newtime = new Date();
+  miliseconds = 0;
   seconds = 0;
   minutes = 0;
+  stopwatchSubscription: Subscription = new Subscription();
   
 
-  generate_properties : boolean = false;
+
 
   public generate_coins_and_enemies (){
     this.generate_properties = !this.generate_properties;
@@ -46,7 +56,7 @@ export class MyGameComponent {
     });
   }
   startgame(){
-    console.log(this.mapheight);
+    // console.log(this.mapheight);
 
     let plane = document.getElementById('plane') as HTMLElement;
     let airport = document.getElementById('airport') as HTMLElement;
@@ -60,15 +70,9 @@ export class MyGameComponent {
     this.plane_width = plane_size.width;
     this.maxPlaneX = this.airport_width - this.plane_width;
     this.maxPlaneY = this.airport_height - this.plane_height;
-    // console.log("Plane" , plane_size, plane, plane.style)
-    console.log("maxPlaneX: " + this.maxPlaneX, "Plane width: ", this.plane_width, "Airport width: ", this.airport_width);
   }
 
   gameplay = false;
-
-  // if(leftPress =  true) {
-  //   )
-
 
   onKeyPress (event: any){
     // console.log(event.target.value);
@@ -80,12 +84,12 @@ export class MyGameComponent {
   }
 
   
-
+ // start game button function
   StartGame() {
     this.generate_coins_and_enemies();
     this.gameplay = true;
     this.starttime = new Date();
-    this.playgame();
+    this.playGame();
     this.gameplay_movement();
     var result = this.create_maps();
     var map = result.selectedMap;
@@ -93,20 +97,32 @@ export class MyGameComponent {
     console.log(mapnumbered);
   }
 
-  playgame() {
-    if(this.gameplay == true){
-      setInterval(() => {
-        this.newtime = new Date();
-        this.seconds = (this.newtime.getTime() - this.starttime.getTime())/1000;
-        if (this.seconds >= 60){
-          this.seconds = 0;
-          this. minutes =+ 1;
-        }
-        // this.time = this.newtime-this.starttime;
-      }, 50)
-      }
+  // playgame() {
+  //   if(this.gameplay == true){
+  //     setInterval(() => {
+  //       this.newtime = new Date();
+  //       this.seconds = (this.newtime.getTime() - this.starttime.getTime())/1000;
+  //       if (this.seconds >= 60){
+  //         this.seconds = 0;
+  //         this. minutes =+ 1;
+  //       }
+  //       // this.time = this.newtime-this.starttime;
+  //     }, 50)
+  //     }
     
-  };
+  // };
+  playGame() {
+    if (this.gameplay) {
+      this.starttime = new Date();
+      this.stopwatchSubscription = interval(50).subscribe(() => {
+        const newTime = new Date();
+        const timeDiff = newTime.getTime() - this.starttime.getTime();
+        this.miliseconds = Math.floor(timeDiff % 1000);
+        this.seconds = Math.floor(timeDiff / 1000 % 60);
+        this.minutes = Math.floor(timeDiff / 1000 / 60);
+      });
+    }
+  }
 
   plane = document.querySelector("#plane") as HTMLElement;
 
@@ -123,7 +139,7 @@ export class MyGameComponent {
       this.plane.style.left = `${this.PlaneX}px`;
       
       
-      this.SpeedY = -1;
+      this.SpeedY = -0.0025*this.airport_height;
 
 
 
@@ -133,15 +149,15 @@ export class MyGameComponent {
         this.SpeedY = -0.1*this.maxPlaneY;
       }
 
-      if(this.leftPress == true){
-        console.log("i changed left press");
-        this.changeImage;
-      }
+      // if(this.leftPress == true){
+      //   console.log("i changed left press");
+      //   this.changeImage;
+      // }
 
-      if(this.rightPress == true){
-        console.log("i changed right press");
-        this.changeImage1;
-      }
+      // if(this.rightPress == true){
+      //   console.log("i changed right press");
+      //   this.changeImage1;
+      // }
 
       this.SpeedY = Math.min(this.SpeedY, 0.1*this.airport_height)
       this.SpeedX = Math.min(this.SpeedX, 30);
@@ -153,31 +169,42 @@ export class MyGameComponent {
       this.PlaneY = Math.max(this.PlaneY, 0);
       this.PlaneY = Math.min(this.PlaneY, this.maxPlaneY);
 
-      console.log(this.SpeedY)
+      // console.log(this.SpeedY)
+
     }, 30)
     
   }
 
-  changeImage(): void {
-  const planeImage = document.getElementById("plane") as HTMLImageElement;
-
-  const backgroundImageURL = getComputedStyle(planeImage).backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
-
-    if (backgroundImageURL.endsWith("plane-right.png")) {
-      planeImage.style.backgroundImage = "url('plane-left.png')";
-    } else {
-      planeImage.style.backgroundImage = "url('plane-right.png')";
+  getPlaneDirectionClass() {
+    if (this.SpeedX > 0) {
+      this.lastDirection = 'right';
+    } else if (this.SpeedX < 0) {
+      this.lastDirection = 'left';
     }
+
+    return `plane-${this.lastDirection}`;
   }
+
+  // changeImage(): void {
+  // const planeImage = document.getElementById("plane") as HTMLImageElement;
+
+  // const backgroundImageURL = getComputedStyle(planeImage).backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+
+  //   if (backgroundImageURL.endsWith("plane-right.png")) {
+  //     planeImage.style.backgroundImage = "url('plane-left.png')";
+  //   } else {
+  //     planeImage.style.backgroundImage = "url('plane-right.png')";
+  //   }
+  // }
   
-  changeImage1(): void {
-    const planeImage = document.getElementById("plane") as HTMLImageElement;
-    if (planeImage.src.endsWith("plane-left.png")) {
-      planeImage.src = "plane-right.png";
-    } else {
-      planeImage.src = "plane-left.png";
-    }
-  }
+  // changeImage1(): void {
+  //   const planeImage = document.getElementById("plane") as HTMLImageElement;
+  //   if (planeImage.src.endsWith("plane-left.png")) {
+  //     planeImage.src = "plane-right.png";
+  //   } else {
+  //     planeImage.src = "plane-left.png";
+  //   }
+  // }
 
   create_maps()  {
     var mapselector = Math.random();
@@ -223,7 +250,7 @@ export class MyGameComponent {
 
   
 
-  // all movemnt and key detection functions + image change functions
+  // all movemnt and key detection functions
 
   ngOnInit(): void {
     window.addEventListener("keydown", this.onKeyDown.bind(this));
@@ -236,26 +263,26 @@ export class MyGameComponent {
 
 
   onKeyDown(event: KeyboardEvent): void {
-    this.keysPressed[event.keyCode] = true;
-    if (event.keyCode === 37) {
+    // this.keysPressed[event.keyCode] = true;
+    if (event.key === "ArrowLeft") {
       this.leftPress = true;
       this.SpeedX += -15;
-      this.changeImage;
-    } else if (event.keyCode === 38) {
-      this.SpeedY += 0.01*this.airport_height;
-    } else if (event.keyCode === 39) {
+      // this.changeImage;
+    } else if (event.key === "ArrowUp") {
+      this.SpeedY = 0.01*this.airport_height;
+    } else if (event.key === "ArrowRight") {
       this.SpeedX += 15;
       this.rightPress = true;
     }
-    event.preventDefault();
+    // event.preventDefault();
   }
 
   onKeyUp(event: KeyboardEvent): void {
     delete this.keysPressed[event.keyCode];
-    if (event.keyCode === 37) {   
+    if (event.key === "ArrowLeft") {   
       this.leftPress = false;
-    } else if (event.keyCode === 38) {
-    } else if (event.keyCode === 39) {
+    } else if (event.key === "ArrowUp") {
+    } else if (event.key === "ArrowRight") {
       this.rightPress = false;
     }
   }
