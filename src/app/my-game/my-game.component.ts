@@ -138,38 +138,41 @@ export class MyGameComponent {
       this.plane.style.top = `${this.PlaneY}px`;
       this.plane.style.left = `${this.PlaneX}px`;
       
-      
       this.SpeedY = -0.0025*this.airport_height;
 
-
-
-      if(this.PlaneY >= this.maxPlaneY){
-        this.SpeedY =+ 1.5;
-      }else if(this.PlaneY <= 0){
-        this.SpeedY = -0.1*this.maxPlaneY;
-      }
-
-      // if(this.leftPress == true){
-      //   console.log("i changed left press");
-      //   this.changeImage;
-      // }
-
-      // if(this.rightPress == true){
-      //   console.log("i changed right press");
-      //   this.changeImage1;
-      // }
-
       this.SpeedY = Math.min(this.SpeedY, 0.1*this.airport_height)
-      this.SpeedX = Math.min(this.SpeedX, 30);
-      this.SpeedX = Math.max(this.SpeedX, -30);
-      // this.SpeedY = Math.max(this.SpeedY, 30);
-      // console.log("airport width", this.airport_width, "airport height", this.airport_height);
+      this.SpeedX = Math.min(this.SpeedX, 0.05*this.airport_width);
+      this.SpeedX = Math.max(this.SpeedX, -0.05*this.airport_width);
+      
       this.PlaneX = Math.min(this.PlaneX, this.maxPlaneX);
       this.PlaneX = Math.max(this.PlaneX, 0);
       this.PlaneY = Math.max(this.PlaneY, 0);
       this.PlaneY = Math.min(this.PlaneY, this.maxPlaneY);
 
-      // console.log(this.SpeedY)
+      // Rebound from the borders
+
+      if(this.PlaneX + this.plane_width == this.airport_width){
+        this.SpeedX = -0.05*this.airport_width;
+      }else if(this.PlaneX == 0){
+        this.SpeedX = 0.05*this.airport_width;
+      }
+
+      if(this.PlaneY >= this.maxPlaneY){
+        this.SpeedY = 0;
+      }else if(this.PlaneY <= 0){
+        this.SpeedY = -0.05*this.maxPlaneY;
+      }
+
+      //lose speed when on ground
+
+      if(this.PlaneY  == this.maxPlaneY){
+        let slowdown = this.SpeedX/10;
+        if(this.SpeedX > 0){
+          this.SpeedX -= slowdown;
+        }else if(this.SpeedX < 0){
+          this.SpeedX -= slowdown;
+        }
+      }
 
     }, 30)
     
@@ -184,27 +187,6 @@ export class MyGameComponent {
 
     return `plane-${this.lastDirection}`;
   }
-
-  // changeImage(): void {
-  // const planeImage = document.getElementById("plane") as HTMLImageElement;
-
-  // const backgroundImageURL = getComputedStyle(planeImage).backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
-
-  //   if (backgroundImageURL.endsWith("plane-right.png")) {
-  //     planeImage.style.backgroundImage = "url('plane-left.png')";
-  //   } else {
-  //     planeImage.style.backgroundImage = "url('plane-right.png')";
-  //   }
-  // }
-  
-  // changeImage1(): void {
-  //   const planeImage = document.getElementById("plane") as HTMLImageElement;
-  //   if (planeImage.src.endsWith("plane-left.png")) {
-  //     planeImage.src = "plane-right.png";
-  //   } else {
-  //     planeImage.src = "plane-left.png";
-  //   }
-  // }
 
   create_maps()  {
     var mapselector = Math.random();
@@ -248,8 +230,6 @@ export class MyGameComponent {
     return {selectedMap:selectedMap, mapnumber:mapnumber};
   };
 
-  
-
   // all movemnt and key detection functions
 
   ngOnInit(): void {
@@ -263,11 +243,9 @@ export class MyGameComponent {
 
 
   onKeyDown(event: KeyboardEvent): void {
-    // this.keysPressed[event.keyCode] = true;
     if (event.key === "ArrowLeft") {
       this.leftPress = true;
       this.SpeedX += -15;
-      // this.changeImage;
     } else if (event.key === "ArrowUp") {
       this.SpeedY = 0.01*this.airport_height;
     } else if (event.key === "ArrowRight") {
