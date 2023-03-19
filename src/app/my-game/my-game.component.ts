@@ -2,6 +2,8 @@
 
 import { Component} from '@angular/core';
 import { interval, Subscription } from 'rxjs';
+declare var $: any;
+
 
 @Component({
   selector: 'app-my-game',
@@ -27,10 +29,24 @@ export class MyGameComponent {
   maxPlaneY = 0;
   SpeedX = 0;
   SpeedY = 0;
+  
   map = this.create_maps();
+  GameMap:string[] = this.map.selectedMap;
+
+  // GameMap: string[] = [
+  //   "....#..$...$....#...",
+  //   "#..$................",
+  //   "........#.....$..#..",
+  //   "....#...............",
+  //   ".$.......$...#..$..#",
+  //   ".....#..............",
+  //   "...........$......#.",
+  //   ".$.............$....",
+  // ];
+
   private lastDirection: string = 'right';
   
-  mapheight = 1/ this.map.selectedMap.length;
+  // mapheight = 1/ this.map.selectedMap.length;
 
   // time units
   starttime = new Date();
@@ -116,9 +132,6 @@ export class MyGameComponent {
       this.plane = document.querySelector("#plane") as HTMLElement;
       this.PlaneY -= this.SpeedY;
       this.PlaneX += this.SpeedX;
-
-      // this.plane.style.top = `${this.PlaneY}px`;
-      // this.plane.style.left = `${this.PlaneX}px`;
       
       this.SpeedY = -0.0025*this.airport_height;
 
@@ -155,11 +168,28 @@ export class MyGameComponent {
           this.SpeedX -= slowdown;
         }
       }
-
+      this.ring_check_delete();
     }, 30)
     
   }
 
+  ring_check_delete(){
+    let self = this;
+    let rings = document.querySelectorAll('.ring');
+    rings.forEach((ring: any) => {
+      var x = ring.offsetLeft;
+      var y = ring.offsetTop;
+  
+      if (self.PlaneX > x - self.plane_width && self.PlaneX < x + 60 &&
+          self.PlaneY > y - self.plane_height && self.PlaneY < y + 60) {
+        self.score++;
+        let row = Number(ring.getAttribute("data-row"));
+        let column = Number(ring.getAttribute("data-column"));
+        self.GameMap[row] = this.GameMap[row].substr(0, column) + '.' + this.GameMap[row].substr(column + 1);
+        ring.src = "assets/img/replacement-image.png";
+      }
+    });
+  }
   // Direction of the plane image
 
   Plane_direction() {

@@ -90,6 +90,10 @@ button{
     height: 7.5vw;
 }
 
+.hidden{
+    display: none;
+}
+
 .points{
     position: absolute;
     font-weight: bold;

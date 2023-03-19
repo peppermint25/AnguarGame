@@ -1,16 +1,20 @@
 <!-- <input type="text" (keypress)="onKeyPress ($event)"  ng-model="field">
 <span id="text"></span>
 <div *ngIf=" a > 5">{{name}}</div> -->
-<div class = "game"  (keypress)="onKeyPress ($event)">
+<div class = "game"
+(keypress)="onKeyPress ($event)">
     <div id="airport">
-        <div class="start-game" *ngIf="gameplay == false">
+        <div class="start-game"
+        *ngIf="gameplay == false">
             <h1 class="start-heading" >
                 Do you want to start the game?
             </h1>
             <p class="start-text">
                 Playing on map <span id="mapnumber">{{map.mapnumber}}</span>
             </p>
-            <button id="start-button" (click)="StartGame()" ng-model="button">Start game</button>
+            <button id="start-button"
+            (click)="StartGame()"
+            ng-model="button">Start game</button>
         </div>
         <div class="points">
             {{score}}
@@ -19,10 +23,21 @@
     <div *ngIf="generate_properties">
         <div *ngFor="let row of map.selectedMap; index as i;">
             <div *ngFor="let item of row.split(''); index as j;">
-                <div *ngIf=" item == '#'" src="assets/img/enemy.png" [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}" class="enemy-area">
-                    <img src="assets/img/enemy.png" class="enemy"/>
+                <div *ngIf=" item == '#'"
+                src="assets/img/enemy.png"
+                [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"
+                class="enemy-area"
+                attr.data-row="{{i}}" 
+                attr.data-colum="{{j}}">
+                    <img src="assets/img/enemy.png"
+                    class="enemy"/>
                 </div>
-                <img *ngIf=" item == '$'" class='ring' src='assets/img/ring.gif' [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"/>
+                <img *ngIf=" item == '$'"
+                class='ring'
+                src='assets/img/ring.gif'
+                [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"
+                attr.data-row={{i}}
+                attr.data-column={{j}}/>
             </div>
         </div>
     </div>
@@ -36,5 +51,7 @@
     </div>
 
     <!-- <button class="refresh" onClick="window.location.reload();">Restart game</button> -->
-    <div id="plane" [ngClass]="Plane_direction()" [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}"></div>
+    <div id="plane"
+    [ngClass]="Plane_direction()"
+    [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}"></div>
 </div>
