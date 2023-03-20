@@ -17,28 +17,28 @@
             ng-model="button">Start game</button>
         </div>
         <div class="points">
-            {{score}}
+            {{collected_rings}}
         </div>
     </div>
     <div *ngIf="generate_properties">
         <div *ngFor="let row of map.selectedMap; index as i;">
             <div *ngFor="let item of row.split(''); index as j;">
                 <div *ngIf=" item == '#'"
-                src="assets/img/enemy.png"
-                [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"
-                class="enemy-area"
-                attr.data-row="{{i}}" 
-                attr.data-colum="{{j}}">
-                    <img src="assets/img/enemy.png"
-                    class="enemy"/>
+                    src="assets/img/enemy.png"
+                    [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"
+                    class="enemy-area"
+                    attr.data-row="{{i}}" 
+                    attr.data-colum="{{j}}">
+                        <img src="assets/img/enemy.png"
+                        class="enemy"/>
                 </div>
-                <img *ngIf=" item == '$'"
-                class='ring'
-                src='assets/img/ring.gif'
-                [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"
-                attr.data-row={{i}}
-                attr.data-column={{j}}/>
-            </div>
+                    <img *ngIf=" item == '$'"
+                    class='ring'
+                    src='assets/img/ring.gif'
+                    [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"
+                    attr.data-row={{i}}
+                    attr.data-column={{j}}/>
+                </div>
         </div>
     </div>
 

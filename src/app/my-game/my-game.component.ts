@@ -23,30 +23,31 @@ export class MyGameComponent {
   gameplay = false;
 
 
-  PlaneX = 0;
-  PlaneY = 0;
+  PlaneX: number = 0;
+  PlaneY: number = 0;
   maxPlaneX = 0;
   maxPlaneY = 0;
   SpeedX = 0;
   SpeedY = 0;
-  
+  lastDirection: string = 'right';
+
+  // map creation and processing
+
   map = this.create_maps();
   GameMap:string[] = this.map.selectedMap;
 
-  // GameMap: string[] = [
-  //   "....#..$...$....#...",
-  //   "#..$................",
-  //   "........#.....$..#..",
-  //   "....#...............",
-  //   ".$.......$...#..$..#",
-  //   ".....#..............",
-  //   "...........$......#.",
-  //   ".$.............$....",
-  // ];
+  // ring count
+  ring_count = this.countRings(this.GameMap)
+  collected_rings = 0;
 
-  private lastDirection: string = 'right';
+  // variables for the game map for displaying
   
-  // mapheight = 1/ this.map.selectedMap.length;
+  map_units_height = 1/ this.GameMap.length;
+  map_units_width = 1/this.GameMap[0].length;
+  // usable_width = this.airport_width-this.plane_width;
+  // map_units_width = this.usable_width/20;
+
+
 
   // time units
   starttime = new Date();
@@ -57,7 +58,7 @@ export class MyGameComponent {
   stopwatchSubscription: Subscription = new Subscription();
   
   // displaying and keeping the score
-  score = 0;
+
 
 
   public generate_coins_and_enemies (){
@@ -75,19 +76,21 @@ export class MyGameComponent {
   }
   itialize_game(){
     // console.log(this.mapheight);
+    setInterval(() => {
+      let plane = document.getElementById('plane') as HTMLElement;
+      let airport = document.getElementById('airport') as HTMLElement;
+  
+      let plane_size = plane.getBoundingClientRect();
+      let airport_size = airport.getBoundingClientRect();
 
-    let plane = document.getElementById('plane') as HTMLElement;
-    let airport = document.getElementById('airport') as HTMLElement;
+      this.airport_height  = airport_size.height;
+      this.airport_width = airport_size.width;
+      this.plane_height = plane_size.height;
+      this.plane_width = plane_size.width;
+      this.maxPlaneX = this.airport_width - this.plane_width;
+      this.maxPlaneY = this.airport_height - this.plane_height;
+    }, 30)
 
-    let plane_size = plane.getBoundingClientRect();
-    let airport_size = airport.getBoundingClientRect();
-
-    this.airport_height  = airport_size.height;
-    this.airport_width = airport_size.width;
-    this.plane_height = plane_size.height;
-    this.plane_width = plane_size.width;
-    this.maxPlaneX = this.airport_width - this.plane_width;
-    this.maxPlaneY = this.airport_height - this.plane_height;
     this.PlaneX = 0.3*this.airport_width;
     this.PlaneY = 0.8*this.airport_height
   }
@@ -112,6 +115,8 @@ export class MyGameComponent {
   }
 
 
+  // stopwatch for the game
+
   game_time() {
     if (this.gameplay) {
       this.starttime = new Date();
@@ -121,6 +126,9 @@ export class MyGameComponent {
         this.miliseconds = Math.floor(timeDiff % 1000);
         this.seconds = Math.floor(timeDiff / 1000 % 60);
         this.minutes = Math.floor(timeDiff / 1000 / 60);
+        // stopping the stopwatch
+        // if(this.ring_count)
+
       });
     }
   }
@@ -182,7 +190,7 @@ export class MyGameComponent {
   
       if (self.PlaneX > x - self.plane_width && self.PlaneX < x + 60 &&
           self.PlaneY > y - self.plane_height && self.PlaneY < y + 60) {
-        self.score++;
+        self.collected_rings++;
         let row = Number(ring.getAttribute("data-row"));
         let column = Number(ring.getAttribute("data-column"));
         self.GameMap[row] = this.GameMap[row].substr(0, column) + '.' + this.GameMap[row].substr(column + 1);
@@ -190,6 +198,21 @@ export class MyGameComponent {
       }
     });
   }
+
+  // count the original amount of rings
+
+  countRings(selectedMap: string[]): number {
+    let ringCount = 0;
+    for (let row of selectedMap) {
+      for (let char of row) {
+        if (char === '$') {
+          ringCount++;
+        }
+      }
+    }
+    return ringCount;
+  }
+
   // Direction of the plane image
 
   Plane_direction() {
