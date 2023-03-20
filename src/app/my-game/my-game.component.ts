@@ -14,13 +14,17 @@ export class MyGameComponent {
   name = 'My Game';
 
   // variables for intializing the game
-  gamelaunchtoken : number;
+  game_launch_token : number;
+  game_end_token: boolean = false;
+  game_win_token: boolean = false;
+  game_lose_token: boolean = false;
   generate_properties : boolean = false;
+  game_start_token : boolean = false;
   airport_height = 0;
   airport_width = 0;
   plane_height = 0;
   plane_width = 0;
-  gameplay = false;
+
 
 
   PlaneX: number = 0;
@@ -35,6 +39,7 @@ export class MyGameComponent {
 
   map = this.create_maps();
   GameMap:string[] = this.map.selectedMap;
+  Map_number: number = this.map.mapnumber;
 
   // ring count
   ring_count = this.countRings(this.GameMap)
@@ -44,20 +49,21 @@ export class MyGameComponent {
   
   map_units_height = 1/ this.GameMap.length;
   map_units_width = 1/this.GameMap[0].length;
-  // usable_width = this.airport_width-this.plane_width;
-  // map_units_width = this.usable_width/20;
-
-
 
   // time units
   starttime = new Date();
   newtime = new Date();
-  miliseconds = 0;
+  miliseconds_to_display: number = 0;
+  miliseconds: number = 0;
   seconds = 0;
   minutes = 0;
   stopwatchSubscription: Subscription = new Subscription();
-  
-  // displaying and keeping the score
+
+  // key press detection and getting the direction
+
+  keysPressed: {[key: number]: boolean} = {};
+  rightPress: boolean = false;
+  leftPress: boolean = false;
 
 
 
@@ -65,11 +71,10 @@ export class MyGameComponent {
     this.generate_properties = !this.generate_properties;
   }
 
-
   constructor(){
-    this.gamelaunchtoken = 1;
+    this.game_launch_token = 1;
     document.addEventListener("DOMContentLoaded", () => {
-      if (this.gamelaunchtoken == 1) {
+      if (this.game_launch_token == 1) {
         this.itialize_game();
       }
     });
@@ -97,15 +102,15 @@ export class MyGameComponent {
 
 
 
-  onKeyPress (event: any){
-    console.log("keypress")
+  // onKeyPress (event: any){
+  //   console.log("keypress")
   
-  }
+  // }
   
  // start game button function
   StartGame() {
     this.generate_coins_and_enemies();
-    this.gameplay = true;
+    this.game_start_token = true;
     this.starttime = new Date();
     this.game_time();
     this.gameplay_movement();
@@ -118,14 +123,16 @@ export class MyGameComponent {
   // stopwatch for the game
 
   game_time() {
-    if (this.gameplay) {
+    if (this.game_start_token) {
       this.starttime = new Date();
-      this.stopwatchSubscription = interval(50).subscribe(() => {
+      this.stopwatchSubscription = interval(10).subscribe(() => {
         const newTime = new Date();
         const timeDiff = newTime.getTime() - this.starttime.getTime();
-        this.miliseconds = Math.floor(timeDiff % 1000);
-        this.seconds = Math.floor(timeDiff / 1000 % 60);
-        this.minutes = Math.floor(timeDiff / 1000 / 60);
+        this.miliseconds = Math.floor((timeDiff % 1000) / 10);
+        this.seconds = Math.floor((timeDiff % 60000) / 1000);
+        this.minutes = Math.floor(timeDiff / 60000);
+        // this.miliseconds_to_display = this.miliseconds.toLocaleString('english', {minimumIntegerDigits : 2, useGrouping : false});
+
         // stopping the stopwatch
         // if(this.ring_count)
 
@@ -133,11 +140,11 @@ export class MyGameComponent {
     }
   }
 
-  plane = document.querySelector("#plane") as HTMLElement;
+  // plane = document.querySelector("#plane") as HTMLElement;
 
   gameplay_movement(){
     setInterval(() => {
-      this.plane = document.querySelector("#plane") as HTMLElement;
+      // this.plane = document.querySelector("#plane") as HTMLElement;
       this.PlaneY -= this.SpeedY;
       this.PlaneX += this.SpeedX;
       
@@ -152,18 +159,20 @@ export class MyGameComponent {
       this.PlaneY = Math.max(this.PlaneY, 0);
       this.PlaneY = Math.min(this.PlaneY, this.maxPlaneY);
 
+
+      console.log(this.SpeedY);
       // Rebound from the borders
 
       if(this.PlaneX + this.plane_width == this.airport_width){
-        this.SpeedX = -0.025*this.airport_width;
+        this.SpeedX = -0.01*this.airport_width;
       }else if(this.PlaneX == 0){
-        this.SpeedX = 0.025*this.airport_width;
+        this.SpeedX = 0.01*this.airport_width;
       }
 
       if(this.PlaneY >= this.maxPlaneY){
         this.SpeedY = 0;
       }else if(this.PlaneY <= 0){
-        this.SpeedY = -0.025*this.maxPlaneY;
+        this.SpeedY = -0.01*this.maxPlaneY;
       }
 
       //lose speed when on ground
@@ -193,10 +202,15 @@ export class MyGameComponent {
         self.collected_rings++;
         let row = Number(ring.getAttribute("data-row"));
         let column = Number(ring.getAttribute("data-column"));
-        self.GameMap[row] = this.GameMap[row].substr(0, column) + '.' + this.GameMap[row].substr(column + 1);
+        self.GameMap[row] = this.GameMap[row].substring(0, column) + '.' + this.GameMap[row].substring(column + 1);
         ring.src = "assets/img/replacement-image.png";
       }
     });
+  }
+
+  enemies_game_end() {
+    let self = this;
+    let enemies = document.querySelectorAll('.enemies');
   }
 
   // count the original amount of rings
@@ -276,19 +290,16 @@ export class MyGameComponent {
     window.addEventListener("keyup", this.onKeyUp.bind(this));
   }
 
-  keysPressed: {[key: number]: boolean} = {};
-  rightPress: boolean = false;
-  leftPress: boolean = false;
 
 
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === "ArrowLeft") {
       this.leftPress = true;
-      this.SpeedX += -15;
+      this.SpeedX += -0.02*this.airport_width;;
     } else if (event.key === "ArrowUp") {
       this.SpeedY = 0.035*this.airport_height;
     } else if (event.key === "ArrowRight") {
-      this.SpeedX += 15;
+      this.SpeedX += 0.02*this.airport_width;
       this.rightPress = true;
     }
     // event.preventDefault();

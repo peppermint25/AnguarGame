@@ -188,7 +188,6 @@ button{
 .start-game h1{
     font-size: 6vw;
     text-align: center;
-    border: #d20cbb 1px dotted;
     top: 10%;
     left: 50%;
     width: 90%;
@@ -202,7 +201,6 @@ button{
     left: 50%;
     width: 80%;
     font-size: 5vw;
-    border: 1px solid blue;
     text-align: center;
     transform: translate(-50%, -50%);
     position: absolute;
@@ -210,7 +208,11 @@ button{
 
 .stopwatch {
     position: absolute;
+    background-color: tan;
+    opacity: 0.4;
+    border: 0.5vw solid rgb(190, 124, 37);
     top: 90%;
     left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 8;
 }

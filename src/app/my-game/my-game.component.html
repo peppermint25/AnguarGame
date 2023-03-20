@@ -1,16 +1,16 @@
 <!-- <input type="text" (keypress)="onKeyPress ($event)"  ng-model="field">
 <span id="text"></span>
 <div *ngIf=" a > 5">{{name}}</div> -->
-<div class = "game"
-(keypress)="onKeyPress ($event)">
+<div class = "game">
+<!-- (keypress)="onKeyPress ($event)"> -->
     <div id="airport">
         <div class="start-game"
-        *ngIf="gameplay == false">
-            <h1 class="start-heading" >
+        *ngIf="game_start_token == false">
+            <h1>
                 Do you want to start the game?
             </h1>
-            <p class="start-text">
-                Playing on map <span id="mapnumber">{{map.mapnumber}}</span>
+            <p>
+                Playing on map {{Map_number}}
             </p>
             <button id="start-button"
             (click)="StartGame()"
@@ -25,7 +25,7 @@
             <div *ngFor="let item of row.split(''); index as j;">
                 <div *ngIf=" item == '#'"
                     src="assets/img/enemy.png"
-                    [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"
+                    [ngStyle]="{'top.%': i * map_units_height * 100, 'left.%' : j * map_units_width * 100}"
                     class="enemy-area"
                     attr.data-row="{{i}}" 
                     attr.data-colum="{{j}}">
@@ -35,7 +35,7 @@
                     <img *ngIf=" item == '$'"
                     class='ring'
                     src='assets/img/ring.gif'
-                    [ngStyle]="{'top.%': i * 12.5, 'left.%' : j*5}"
+                    [ngStyle]="{'top.%': i * map_units_height * 100, 'left.%' : j * map_units_width * 100}"
                     attr.data-row={{i}}
                     attr.data-column={{j}}/>
                 </div>
@@ -53,5 +53,15 @@
     <!-- <button class="refresh" onClick="window.location.reload();">Restart game</button> -->
     <div id="plane"
     [ngClass]="Plane_direction()"
-    [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}"></div>
+    [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}">
+    </div>
+    <div id="game_end_screen" *ngIf="game_end_token">
+        <div id="game_win_component" >
+            <h1>You won</h1>
+            <p>you end time {{minutes}}:{{seconds}}:{{miliseconds}}</p>
+        </div>
+        <div id="game_lose_component">
+            <h1>You lose</h1>
+        </div>
+    </div>
 </div>
