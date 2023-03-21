@@ -148,9 +148,10 @@ export class MyGameComponent {
       this.PlaneY -= this.SpeedY;
       this.PlaneX += this.SpeedX;
       
-      this.SpeedY = -0.0025*this.airport_height;
+      this.SpeedY += -0.005*this.airport_height;
 
-      this.SpeedY = Math.min(this.SpeedY, 0.1*this.airport_height)
+      this.SpeedY = Math.min(this.SpeedY, 0.025*this.airport_height);
+      this.SpeedY = Math.max(this.SpeedY, -0.01*this.airport_height);
       this.SpeedX = Math.min(this.SpeedX, 0.05*this.airport_width);
       this.SpeedX = Math.max(this.SpeedX, -0.05*this.airport_width);
       
