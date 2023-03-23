@@ -168,56 +168,56 @@ export class MyGameComponent {
   gameplay_movement(){
     if(this.game_start_token) {
       if(this.game_end_token == false){
-      setInterval(() => {
-        // this.plane = document.querySelector("#plane") as HTMLElement;
-        this.PlaneY -= this.SpeedY;
-        this.PlaneX += this.SpeedX;
-        
-        this.SpeedY += -0.005*this.airport_height;
-  
-        this.SpeedY = Math.min(this.SpeedY, 0.025*this.airport_height);
-        this.SpeedY = Math.max(this.SpeedY, -0.01*this.airport_height);
-        this.SpeedX = Math.min(this.SpeedX, 0.05*this.airport_width);
-        this.SpeedX = Math.max(this.SpeedX, -0.05*this.airport_width);
-        
-        this.PlaneX = Math.min(this.PlaneX, this.maxPlaneX);
-        this.PlaneX = Math.max(this.PlaneX, 0);
-        this.PlaneY = Math.max(this.PlaneY, 0);
-        this.PlaneY = Math.min(this.PlaneY, this.maxPlaneY);
-  
-          // Rebound from the borders
-  
-        if(this.PlaneX + this.plane_width == this.airport_width){
-          this.SpeedX = -0.01*this.airport_width;
-        }else if(this.PlaneX == 0){
-          this.SpeedX = 0.01*this.airport_width;
-        }
-  
-        if(this.PlaneY >= this.maxPlaneY){
-          this.SpeedY = 0.;
-        }else if(this.PlaneY <= 0){
-          this.SpeedY = -0.01*this.maxPlaneY;
-        }
-  
-        //lose speed when on ground
-  
-        if(this.PlaneY  == this.maxPlaneY){
-          let slowdown = this.SpeedX/10;
-          if(this.SpeedX > 0){
-            this.SpeedX -= slowdown;
-          }else if(this.SpeedX < 0){
-            this.SpeedX -= slowdown;
+        setInterval(() => {
+          // this.plane = document.querySelector("#plane") as HTMLElement;
+          this.PlaneY -= this.SpeedY;
+          this.PlaneX += this.SpeedX;
+          
+          this.SpeedY += -0.005*this.airport_height;
+    
+          this.SpeedY = Math.min(this.SpeedY, 0.025*this.airport_height);
+          this.SpeedY = Math.max(this.SpeedY, -0.01*this.airport_height);
+          this.SpeedX = Math.min(this.SpeedX, 0.05*this.airport_width);
+          this.SpeedX = Math.max(this.SpeedX, -0.05*this.airport_width);
+          
+          this.PlaneX = Math.min(this.PlaneX, this.maxPlaneX);
+          this.PlaneX = Math.max(this.PlaneX, 0);
+          this.PlaneY = Math.max(this.PlaneY, 0);
+          this.PlaneY = Math.min(this.PlaneY, this.maxPlaneY);
+    
+            // Rebound from the borders
+    
+          if(this.PlaneX + this.plane_width == this.airport_width){
+            this.SpeedX = -0.01*this.airport_width;
+          }else if(this.PlaneX == 0){
+            this.SpeedX = 0.01*this.airport_width;
           }
-        }
+    
+          if(this.PlaneY >= this.maxPlaneY){
+            this.SpeedY = 0.;
+          }else if(this.PlaneY <= 0){
+            this.SpeedY = -0.01*this.maxPlaneY;
+          }
+    
+          //lose speed when on ground
+    
+          if(this.PlaneY  == this.maxPlaneY){
+            let slowdown = this.SpeedX/10;
+            if(this.SpeedX > 0){
+              this.SpeedX -= slowdown;
+            }else if(this.SpeedX < 0){
+              this.SpeedX -= slowdown;
+            }
+          }
 
-        this.ring_check_delete();
-        this.enemies_game_end();
-      }, 30)
-      
-    }else{
-      this.SpeedX = 0;
-      this.SpeedY = 0;
-    }
+          this.ring_check_delete();
+          this.enemies_game_end();
+        }, 30) 
+      }else{
+        this.SpeedX = 0;
+        this.SpeedY = 0;
+        console.log("ended");
+      }
   }
   }
 
@@ -251,8 +251,10 @@ export class MyGameComponent {
       var y = enemy.offsetTop;
       if (self.PlaneX > x - self.plane_width && self.PlaneX < x + 60 &&
         self.PlaneY > y - self.plane_height && self.PlaneY < y + 60) {
-          this.game_end_token = true;
-          this.game_lose_token = true;
+          self.game_end_token = true;
+          self.game_lose_token = true;
+          self.SpeedX = 0;
+          self.SpeedY = 0;
         }
     });
   }
