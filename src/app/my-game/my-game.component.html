@@ -21,7 +21,7 @@
         </div>
     </div>
     <div *ngIf="generate_properties">
-        <div *ngFor="let row of map.selectedMap; index as i;">
+        <div *ngFor="let row of GameMap; index as i;">
             <div *ngFor="let item of row.split(''); index as j;">
                 <div *ngIf=" item == '#'"
                     src="assets/img/enemy.png"
@@ -41,13 +41,8 @@
                 </div>
         </div>
     </div>
-
-    <!-- <div class="map-div">
-        Playing on map number <span id="mapnumber">{{mapnumber}}</span>
-
-    </div> -->
     <div class="stopwatch">
-        {{minutes}}:{{seconds}}:{{miliseconds}}
+        {{minutes}}:{{seconds}}:{{milliseconds}}
     </div>
 
     <!-- <button class="refresh" onClick="window.location.reload();">Restart game</button> -->
@@ -56,12 +51,16 @@
     [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}">
     </div>
     <div id="game_end_screen" *ngIf="game_end_token">
-        <div id="game_win_component" >
+        <div id="game_win_component" *ngIf="game_win_token">
             <h1>You won</h1>
-            <p>you end time {{minutes}}:{{seconds}}:{{miliseconds}}</p>
+            <h4> You collected all {{collected_rings}} rings.</h4>
+            <p>Your end time is {{time_string}} seconds</p>
+            <button (click)="refresh()">Restart game</button>
         </div>
-        <div id="game_lose_component">
+        <div id="game_lose_component" *ngIf="game_lose_token">
             <h1>You lose</h1>
+            <p> You got {{collected_rings}} out of {{ring_count}} rings.</p>
+            <button (click)="refresh()" id="">Restart game</button>
         </div>
     </div>
 </div>
