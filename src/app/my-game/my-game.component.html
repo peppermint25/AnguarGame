@@ -59,7 +59,7 @@
         </div>
         <div id="game_lose_component" *ngIf="game_lose_token">
             <h1>You lose</h1>
-            <p> You got {{collected_rings}} out of {{ring_count}} rings.</p>
+            <h4> You got {{collected_rings}} out of {{ring_count}} rings.</h4>
             <button (click)="refresh()" id="">Restart game</button>
         </div>
     </div>

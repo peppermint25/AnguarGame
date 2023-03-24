@@ -85,6 +85,9 @@ export class MyGameComponent {
       if (this.game_launch_token) {
         this.itialize_game();
         this.ring_count = this.countRings(this.GameMap)
+        this.PlaneX = 0.3*this.airport_width
+        this.PlaneY = 0.8*this.airport_height
+        console.log(this.PlaneX, this.PlaneY)
       }
     });
   }
@@ -165,10 +168,12 @@ export class MyGameComponent {
 
   // plane = document.querySelector("#plane") as HTMLElement;
 
+  gamecode : any;
+
   gameplay_movement(){
     if(this.game_start_token) {
-      if(this.game_end_token == false){
-        setInterval(() => {
+      if(!this.game_end_token){
+        this.gamecode = setInterval(() => {
           // this.plane = document.querySelector("#plane") as HTMLElement;
           this.PlaneY -= this.SpeedY;
           this.PlaneX += this.SpeedX;
@@ -209,16 +214,21 @@ export class MyGameComponent {
               this.SpeedX -= slowdown;
             }
           }
-
+          console.log("running");
           this.ring_check_delete();
           this.enemies_game_end();
         }, 30) 
-      }else{
+      }else if(this.game_end_token == true){
+        if(this.gamecode){
+          clearInterval(this.gamecode)
+          this.gamecode = null;
+        }
         this.SpeedX = 0;
         this.SpeedY = 0;
         console.log("ended");
+
       }
-  }
+    }
   }
 
   ring_check_delete(){
@@ -255,6 +265,7 @@ export class MyGameComponent {
           self.game_lose_token = true;
           self.SpeedX = 0;
           self.SpeedY = 0;
+          this.gameplay_movement();
         }
     });
   }

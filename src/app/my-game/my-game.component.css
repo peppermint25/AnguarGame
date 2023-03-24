@@ -259,6 +259,7 @@ button{
     border: 0.5vw solid rgb(190, 55, 37);
     padding: 3vw;
     opacity: 0.8;
+    z-index: 8;
 }
 
 #game_lose_component h1{
@@ -273,7 +274,7 @@ button{
 }
 
 #game_lose_component h4{
-    top: 30%;
+    top: 35%;
     left: 50%;
     width: 80%;
     font-size: 5vw;
@@ -294,12 +295,12 @@ button{
 
 #game_lose_component button {
     position: absolute;
-    top: 85%;
+    top: 80%;
     background-color: rgb(193, 0, 0);
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 0.5vw;
     width : 30vw;
     font-size: 5vw;
-    border: 1px solid rgb(190, 124, 37);
+    border: 1px solid rgb(124, 4, 4);
 }
