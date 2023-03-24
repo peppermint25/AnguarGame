@@ -1,11 +1,7 @@
-<!-- <input type="text" (keypress)="onKeyPress ($event)"  ng-model="field">
-<span id="text"></span>
-<div *ngIf=" a > 5">{{name}}</div> -->
 <div class = "game">
-<!-- (keypress)="onKeyPress ($event)"> -->
     <div id="airport">
         <div class="start-game"
-        *ngIf="game_start_token == false">
+            *ngIf="game_start_token == false">
             <h1>
                 Do you want to start the game?
             </h1>
@@ -16,51 +12,51 @@
             (click)="StartGame()"
             ng-model="button">Start game</button>
         </div>
-        <div class="points">
+        <div class="points"
+            *ngIf="game_start_token && !game_end_token">
             {{collected_rings}}
         </div>
-    </div>
-    <div *ngIf="generate_properties">
-        <div *ngFor="let row of GameMap; index as i;">
-            <div *ngFor="let item of row.split(''); index as j;">
-                <div *ngIf=" item == '#'"
-                    src="assets/img/enemy.png"
-                    [ngStyle]="{'top.%': i * map_units_height * 100, 'left.%' : j * map_units_width * 100}"
-                    class="enemy-area"
-                    attr.data-row="{{i}}" 
-                    attr.data-colum="{{j}}">
-                        <img src="assets/img/enemy.png"
-                        class="enemy"/>
-                </div>
-                    <img *ngIf=" item == '$'"
-                    class='ring'
-                    src='assets/img/ring.gif'
-                    [ngStyle]="{'top.%': i * map_units_height * 100, 'left.%' : j * map_units_width * 100}"
-                    attr.data-row={{i}}
-                    attr.data-column={{j}}/>
-                </div>
+        <div *ngIf="generate_properties">
+            <div *ngFor="let row of GameMap; index as i;">
+                <div *ngFor="let item of row.split(''); index as j;">
+                    <div *ngIf=" item == '#'"
+                        src="assets/img/enemy.png"
+                        [ngStyle]="{'top.%': i * map_units_height * 100, 'left.%' : j * map_units_width * 100}"
+                        class="enemy-area"
+                        attr.data-row="{{i}}" 
+                        attr.data-colum="{{j}}">
+                            <img src="assets/img/enemy.png"
+                            class="enemy"/>
+                    </div>
+                        <img *ngIf=" item == '$'"
+                        class='ring'
+                        src='assets/img/ring.gif'
+                        [ngStyle]="{'top.%': i * map_units_height * 100, 'left.%' : j * map_units_width * 100}"
+                        attr.data-row={{i}}
+                        attr.data-column={{j}}/>
+                    </div>
+            </div>
         </div>
-    </div>
-    <div class="stopwatch">
+        <div class="stopwatch"
+        *ngIf="game_start_token && !game_end_token">
         {{minutes}}:{{seconds}}:{{milliseconds}}
-    </div>
-
-    <!-- <button class="refresh" onClick="window.location.reload();">Restart game</button> -->
-    <div id="plane"
-    [ngClass]="Plane_direction()"
-    [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}">
-    </div>
-    <div id="game_end_screen" *ngIf="game_end_token">
-        <div id="game_win_component" *ngIf="game_win_token">
-            <h1>You won</h1>
-            <h4> You collected all {{collected_rings}} rings.</h4>
-            <p>Your end time is {{time_string}} seconds</p>
-            <button (click)="refresh()">Restart game</button>
         </div>
-        <div id="game_lose_component" *ngIf="game_lose_token">
-            <h1>You lose</h1>
-            <h4> You got {{collected_rings}} out of {{ring_count}} rings.</h4>
-            <button (click)="refresh()" id="">Restart game</button>
+        <div id="plane"
+            [ngClass]="Plane_direction()"
+            [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}">
+        </div>
+        <div id="game_end_screen" *ngIf="game_end_token">
+            <div id="game_win_component" *ngIf="game_win_token">
+                <h1>You won</h1>
+                <h4>You collected all {{collected_rings}} rings.</h4>
+                <p>Your end time is {{time_string}} seconds</p>
+                <button (click)="refresh()">Restart game</button>
+            </div>
+            <div id="game_lose_component" *ngIf="game_lose_token">
+                <h1>You lost</h1>
+                <h4> You got {{collected_rings}} out of {{ring_count}} rings.</h4>
+                <button (click)="refresh()" id="">Restart game</button>
+            </div>
         </div>
     </div>
 </div>

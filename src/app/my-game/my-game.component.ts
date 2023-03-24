@@ -69,6 +69,11 @@ export class MyGameComponent {
   rightPress: boolean = false;
   leftPress: boolean = false;
 
+  // for set interval in gameplay_movement 
+
+  gamecode : any;
+
+
   public generate_coins_and_enemies (){
     this.generate_properties = !this.generate_properties;
   }
@@ -163,9 +168,6 @@ export class MyGameComponent {
     }
   }
 
-  // plane = document.querySelector("#plane") as HTMLElement;
-
-  gamecode : any;
 
   gameplay_movement(){
     if(this.game_start_token) {
@@ -215,16 +217,6 @@ export class MyGameComponent {
           this.enemies_game_end();
         }, 30) 
       }
-      // }else if(this.game_end_token == true){
-      //   if(this.gamecode){
-      //     clearInterval(this.gamecode)
-      //     this.gamecode = null;
-      //   }
-      //   this.SpeedX = 0;
-      //   this.SpeedY = 0;
-      //   console.log("ended");
-
-      // }
     }
   }
 
@@ -234,9 +226,11 @@ export class MyGameComponent {
     rings.forEach((ring: any) => {
       var x = ring.offsetLeft;
       var y = ring.offsetTop;
+      var width = ring.width;
+      var height = ring.height;
   
-      if (self.PlaneX > x - self.plane_width && self.PlaneX < x + 60 &&
-          self.PlaneY > y - self.plane_height && self.PlaneY < y + 60) {
+      if (self.PlaneX > x - self.plane_width && self.PlaneX < x + width &&
+          self.PlaneY > y - self.plane_height && self.PlaneY < y + height) {
         self.collected_rings++;
         let row = Number(ring.getAttribute("data-row"));
         let column = Number(ring.getAttribute("data-column"));
@@ -260,7 +254,7 @@ export class MyGameComponent {
       var x = enemy.offsetLeft;
       var y = enemy.offsetTop;
       if (self.PlaneX > x - self.plane_width && self.PlaneX < x +  42&&
-        self.PlaneY > y - self.plane_height && self.PlaneY < y + 23) {
+        self.PlaneY > y - self.plane_height + 5 && self.PlaneY < y + 23) {
           self.game_end_token = true;
           self.game_lose_token = true;
           self.SpeedX = 0;
@@ -354,8 +348,6 @@ export class MyGameComponent {
     window.addEventListener("keydown", this.onKeyDown.bind(this));
     window.addEventListener("keyup", this.onKeyUp.bind(this));
   }
-
-
 
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === "ArrowLeft") {
