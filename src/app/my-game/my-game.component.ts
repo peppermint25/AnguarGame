@@ -37,7 +37,6 @@ export class MyGameComponent {
 
   // map creation and processing
 
-  counter : number = 0;
   map = this.create_maps();
   map_actual = this.map();
   GameMap:string[] = this.map_actual.selectedMap;
@@ -85,17 +84,12 @@ export class MyGameComponent {
       if (this.game_launch_token) {
         this.itialize_game();
         this.ring_count = this.countRings(this.GameMap)
-        this.PlaneX = 0.3*this.airport_width
-        this.PlaneY = 0.8*this.airport_height
-        console.log(this.PlaneX, this.PlaneY)
       }
     });
   }
 
   itialize_game(){
 
-    this.PlaneX = 0.3*this.airport_width;
-    this.PlaneY = 0.8*this.airport_height
 
     setInterval(() => {
       let plane = document.getElementById('plane') as HTMLElement;
@@ -112,6 +106,9 @@ export class MyGameComponent {
       this.maxPlaneY = this.airport_height - this.plane_height;
     }, 30)
 
+    this.PlaneX = 0.3*this.airport_width;
+    this.PlaneY = 0.8*this.airport_height
+
 
   }
 
@@ -127,6 +124,8 @@ export class MyGameComponent {
     this.starttime = new Date();
     this.game_time();
     this.gameplay_movement();
+    this.PlaneX = 0.3*this.airport_width;
+    this.PlaneY = 0.8*this.airport_height
   }
 
 
@@ -141,8 +140,6 @@ export class MyGameComponent {
         this.milliseconds = Math.floor((timeDiff % 1000) / 10);
         this.seconds = Math.floor((timeDiff % 60000) / 1000);
         this.minutes = Math.floor(timeDiff / 60000);
-        // this.miliseconds_to_display = this.miliseconds.toLocaleString('english', {minimumIntegerDigits : 2, useGrouping : false});
-
         // stopping the stopwatch
         if(this.ring_count == this.collected_rings){
           this.stopwatchSubscription.unsubscribe();
@@ -178,7 +175,7 @@ export class MyGameComponent {
           this.PlaneY -= this.SpeedY;
           this.PlaneX += this.SpeedX;
           
-          this.SpeedY += -0.005*this.airport_height;
+          this.SpeedY += -0.003*this.airport_height;
     
           this.SpeedY = Math.min(this.SpeedY, 0.025*this.airport_height);
           this.SpeedY = Math.max(this.SpeedY, -0.01*this.airport_height);
@@ -214,20 +211,20 @@ export class MyGameComponent {
               this.SpeedX -= slowdown;
             }
           }
-          console.log("running");
           this.ring_check_delete();
           this.enemies_game_end();
         }, 30) 
-      }else if(this.game_end_token == true){
-        if(this.gamecode){
-          clearInterval(this.gamecode)
-          this.gamecode = null;
-        }
-        this.SpeedX = 0;
-        this.SpeedY = 0;
-        console.log("ended");
-
       }
+      // }else if(this.game_end_token == true){
+      //   if(this.gamecode){
+      //     clearInterval(this.gamecode)
+      //     this.gamecode = null;
+      //   }
+      //   this.SpeedX = 0;
+      //   this.SpeedY = 0;
+      //   console.log("ended");
+
+      // }
     }
   }
 
@@ -248,6 +245,9 @@ export class MyGameComponent {
         if(this.collected_rings == this.ring_count){
           this.game_end_token = true;
           this.game_win_token = true;
+          self.SpeedX = 0;
+          self.SpeedY =+ 0.02*this.airport_height
+          clearInterval(this.gamecode);
         }
       }
     });
@@ -259,12 +259,13 @@ export class MyGameComponent {
     enemies.forEach((enemy: any) => {
       var x = enemy.offsetLeft;
       var y = enemy.offsetTop;
-      if (self.PlaneX > x - self.plane_width && self.PlaneX < x + 60 &&
-        self.PlaneY > y - self.plane_height && self.PlaneY < y + 60) {
+      if (self.PlaneX > x - self.plane_width && self.PlaneX < x +  42&&
+        self.PlaneY > y - self.plane_height && self.PlaneY < y + 23) {
           self.game_end_token = true;
           self.game_lose_token = true;
           self.SpeedX = 0;
           self.SpeedY = 0;
+          clearInterval(this.gamecode);
           this.gameplay_movement();
         }
     });
@@ -361,7 +362,7 @@ export class MyGameComponent {
       this.leftPress = true;
       this.SpeedX += -0.02*this.airport_width;;
     } else if (event.key === "ArrowUp") {
-      this.SpeedY = 0.035*this.airport_height;
+      this.SpeedY = 0.02*this.airport_height;
     } else if (event.key === "ArrowRight") {
       this.SpeedX += 0.02*this.airport_width;
       this.rightPress = true;
