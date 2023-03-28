@@ -9,6 +9,7 @@ import { MyGameComponent } from './my-game/my-game.component';
   declarations: [
     AppComponent,
     MyGameComponent,
+
   ],
   imports: [
     BrowserModule,

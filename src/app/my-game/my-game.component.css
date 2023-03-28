@@ -70,11 +70,6 @@ button{
     left: -70px;
 }
 
-.game-win{
-    position: absolute;
-    object-fit: cover;
-}
-
 .ring{
     
     position: absolute;

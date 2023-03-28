@@ -162,8 +162,6 @@ export class MyGameComponent {
             this.time_string = `${this.seconds.toString()}.${this.milliseconds.toString()}`;
           }
         }
-
-
       });
     }
   }
@@ -260,7 +258,6 @@ export class MyGameComponent {
           self.SpeedX = 0;
           self.SpeedY = 0;
           clearInterval(this.gamecode);
-          this.gameplay_movement();
         }
     });
   }
