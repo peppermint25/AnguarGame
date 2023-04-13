@@ -1,7 +1,11 @@
 // import { Component } from '@angular/core';
 
-import { Component} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { interval, Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { LeaderboardService } from '../services/leaderboard.service';
+import { Router } from '@angular/router';
+
 declare var $: any;
 
 
@@ -10,9 +14,9 @@ declare var $: any;
   templateUrl: './my-game.component.html',
   styleUrls: ['./my-game.component.css']
 })
-export class MyGameComponent {
+export class MyGameComponent implements OnInit {
   name = 'My Game';
-
+ 
   // variables for intializing the game and the borders
   game_launch_token : boolean = false;;
   game_end_token: boolean = false;
@@ -72,14 +76,67 @@ export class MyGameComponent {
   // for set interval in gameplay_movement 
 
   gamecode : any;
+  playerName: string = "";
 
+  //for leaderboard
+
+  // isLeaderboardOpen = false;
+
+  // toggleLeaderboard(){
+  //   this.isLeaderboardOpen = !this.isLeaderboardOpen;
+  // }
+
+  LeaderboardOpen = false;
+  FormOpen = false;
+  Submited = false;
 
   public generate_coins_and_enemies (){
     this.generate_properties = !this.generate_properties;
   }
 
-  constructor(){
+  constructor(private http: HttpClient, private LeaderboardService: LeaderboardService, private router: Router) {
+    this.OnInit();
+    // this.LeaderboardOpen = LeaderboardService.isLeaderboardOpen;
+  }
+
+  showLeaderboard() {
+    this.router.navigate(['/leaderboard']);
+    // this.LeaderboardService.isLeaderboardOpen = !this.LeaderboardService.isLeaderboardOpen
+  }
+
+  submitScore(){
+    const data = {
+      username: this.playerName,
+      gametime: this.time_string
+    };
+
+    this.http.post('http://localhost:4200/add', data)
+      .subscribe(
+        res => console.log(res),
+        err => console.log(err)
+        )
+
+        this.playerName = '';
+
+        this.FormOpen = !this.FormOpen;
+        this.Submited = !this.Submited;
+  }
+
+  toggleForm() {
+    this.FormOpen = !this.FormOpen;
+  }
+
+  OnInit(){
     this.launch_game();
+    console.log("Starting")
+    // console.log("this",this.http.get("http://localhost:4200/bbb").subscribe(
+    //   res => {
+    //     console.log(res, "res");
+    //   },
+    //   error => {
+    //     console.log(error);
+    //   }
+    // ));
   }
 
 

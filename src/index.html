@@ -15,6 +15,9 @@
   <app-root></app-root>
   <div class="game-container">
     <app-my-game></app-my-game>
+    <div id="leaderboard">
+      <app-leaderboard *ngIf="leaderboardOpen" (close)="toggleLeaderboard()"></app-leaderboard>
+    </div>
   </div>
 </body>
 </html>

@@ -1,0 +1,11 @@
+{
+
+    "/leaderboard":{
+      "target": "http://localhost:5000",
+      "secure": false
+    },
+    "/add":{
+      "target": "http://localhost:5000",
+      "secure": false
+    }
+  }

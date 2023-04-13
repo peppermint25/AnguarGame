@@ -1,4 +1,5 @@
-<div class = "game">
+<div class = "game"
+    [ngClass]="{'disabled': LeaderboardOpen}">
     <div id="airport">
         <div class="start-game"
             *ngIf="game_start_token == false">
@@ -9,8 +10,15 @@
                 Playing on map {{Map_number}}
             </p>
             <button id="start-button"
-            (click)="StartGame()"
-            ng-model="button">Start game</button>
+                    (click)="StartGame()"
+                    ng-model="button">
+                    Start game
+            </button>
+            <button id="leaderboard-button"
+                    (click)="showLeaderboard()"
+                    [disabled]="LeaderboardOpen">
+                    Leaderboard
+            </button>
         </div>
         <div class="points"
             *ngIf="game_start_token && !game_end_token">
@@ -51,6 +59,17 @@
                 <h4>You collected all {{collected_rings}} rings.</h4>
                 <p>Your end time is {{time_string}} seconds</p>
                 <button (click)="refresh()">Restart game</button>
+                <button (click)="toggleForm()" *ngIf="!Submited">Submit time</button>
+                <div class="form-container" [ngClass]="{'hidden': !FormOpen}">
+                    <form (ngSubmit)="submitScore()">
+                        <label for="playerName">Player Name:</label>
+                        <input type="text" id="playerName" name="playerName" [(ngModel)]="playerName">
+                        <label for="timeString">Time:</label>
+                        <input type="text" id="timeString" name="timeString" [value]="time_string" readonly>                        
+                        <button type="submit">Submit Score</button>
+                    </form>        
+
+                </div>
             </div>
             <div id="game_lose_component" *ngIf="game_lose_token">
                 <h1>You lost</h1>

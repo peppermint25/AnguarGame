@@ -120,21 +120,41 @@ button{
     border: 1vw solid rgb(190, 124, 37);
 }
 
-.start-game button {
-    font-size: 5vw;
+.start-game #start-button {
+    font-size: 3.2vw;
     position: absolute;
     display: flex;
     border: 0.3vw solid black;
     background-color: orange;;
-    left: 50%;
+    left: 75%;
+    white-space: nowrap;
     top: 80%;
-    width: 30vw;
+    width: 20vw;
+    height: 10vw;
+    align-items: center;
     text-align: center;
     justify-content: center;
     transform: translate(-50%, -50%);
-    opacity: 0.8;
+    opacity: 1;
     padding: 0.2vw;
+}
 
+.start-game #leaderboard-button {
+    font-size: 3.2vw;
+    position: absolute;
+    display: flex;
+    border: 0.3vw solid black;
+    background-color: orange;;
+    left: 25%;
+    top: 80%;
+    width: 20vw;
+    height: 10vw;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    padding: 0.2vw;
 }
 
 .start-game h1{
@@ -282,4 +302,14 @@ button{
     width : 30vw;
     font-size: 5vw;
     border: 1px solid rgb(124, 4, 4);
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  #form-container {
+    background-color: aliceblue;
+    border: #963939 1px solid;
 }

@@ -1,0 +1,13 @@
+.leaderboard-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 70%;
+    height: 70%;
+    border: 2px solid black;
+    padding: auto;
+    /* z-index: 9999; */
+    border-radius: 10px;
+  }
