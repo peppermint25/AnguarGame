@@ -2,4 +2,6 @@
 
 This, is a simple Angular web game
 
-Working on making a database with all the results
+The leaderboard is managed with a python and mongodb backend https://github.com/peppermint25/python-mongodb
+
+
