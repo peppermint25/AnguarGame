@@ -2,6 +2,6 @@
 
 This, is a simple Angular web game
 
-The leaderboard is managed with a python and mongodb backend https://github.com/peppermint25/python-mongodb
+The leaderboard is managed with a python and mongodb launched from this project with 'docker-compose up --build' - https://github.com/peppermint25/python-mongodb
 
 
