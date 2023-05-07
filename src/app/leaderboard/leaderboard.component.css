@@ -5,9 +5,35 @@
     transform: translate(-50%, -50%);
     background-color: white;
     width: 70%;
-    height: 70%;
+    /* height: 70%; */
     border: 2px solid black;
-    padding: auto;
-    /* z-index: 9999; */
+    z-index: 200;
     border-radius: 10px;
+    /* text-align: center; */
   }
+
+/* h1 {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translate(-50%, -50%);
+
+} */
+
+/* table {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 80%;
+  transform: translate(-50%);
+
+} */
+
+/* .leaderboard-row {
+  border: 2px solid rgb(0, 0, 0);
+}
+
+.leaderboard-row td {
+  text-align: center;
+}
+ */

@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { LeaderboardService } from '../services/leaderboard.service';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 export interface UserTime {
+  _id: { $oid: string};
   username: string;
   gametime: string;
 };
@@ -15,15 +14,17 @@ export interface UserTime {
 })
 export class LeaderboardComponent {
 
-  constructor(private http: HttpClient, private LeaderboardService: LeaderboardService, private router: Router) {}
+  // LeaderboardOpen = false;
+
+  constructor(private http: HttpClient) {
+    // this.LeaderboardOpen = true;
+  }
 
   players_list: UserTime[] = [];
 
 
-
-  ngOnInit() {
-    // console.log("leaderboard")
-    this.http.get<UserTime[]>("http://localhost:4200/leaderboard") 
+  GetLeaderboard(){
+    this.http.get<UserTime[]>("http://localhost:4200/leaderboard-data") 
     .subscribe(
       
       res => {
@@ -38,12 +39,15 @@ export class LeaderboardComponent {
     );
   }
 
-  // closeLeaderboard() {
-  //   this.LeaderboardService.toggleLeaderboard();
-  // }
-
-  closeLeaderboard() {
-    this.router.navigate(['/']);
-    // this.LeaderboardService.isLeaderboardOpen = !this.LeaderboardService.isLeaderboardOpen
+  deleteEntry(entryId: string) {
+    this.http.delete(`/leaderboard-data/${entryId}`).subscribe(() => {
+      this.GetLeaderboard();
+    });
   }
+
+  ngOnInit() {
+    // console.log("leaderboard")
+    this.GetLeaderboard();
+  }
+
 }

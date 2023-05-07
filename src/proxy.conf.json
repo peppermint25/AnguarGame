@@ -1,6 +1,6 @@
 {
 
-    "/leaderboard":{
+    "/leaderboard-data":{
       "target": "http://localhost:5000",
       "secure": false
     },

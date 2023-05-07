@@ -1,10 +1,8 @@
-// import { Component } from '@angular/core';
 
 import { Component, OnInit} from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { LeaderboardService } from '../services/leaderboard.service';
-import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 declare var $: any;
 
@@ -33,19 +31,33 @@ export class MyGameComponent implements OnInit {
 
   PlaneX: number = 0.3*this.airport_width;
   PlaneY: number = 0.8*this.airport_height;
-  maxPlaneX = 0;
+  maxPlaneX = 0; 
   maxPlaneY = 0;
   SpeedX = 0;
   SpeedY = 0;
   lastDirection: string = 'right';
 
+  navbar_height = 0; 
+
   // map creation and processing
 
   map = this.create_maps();
   map_actual = this.map();
-  GameMap:string[] = this.map_actual.selectedMap;
-  Map_number: number = this.map_actual.mapnumber;
+  // GameMap:string[] = this.map_actual.selectedMap;
+  // Map_number: number = this.map_actual.mapnumber;
 
+  GameMap:string[] = [
+    "$..................$",
+    "....................",
+    "....................",
+    "......#.............",
+    "....................",
+    "....................",
+    "....................",
+    "$..................$",
+  ];
+
+  Map_number = "test"
 
   map_units_height = 1/ this.GameMap.length;
   map_units_width = 1/this.GameMap[0].length;
@@ -76,17 +88,13 @@ export class MyGameComponent implements OnInit {
   // for set interval in gameplay_movement 
 
   gamecode : any;
+
+  // for submiting to the database
+
   playerName: string = "";
 
-  //for leaderboard
+  // for the form to submit to leaderboard
 
-  // isLeaderboardOpen = false;
-
-  // toggleLeaderboard(){
-  //   this.isLeaderboardOpen = !this.isLeaderboardOpen;
-  // }
-
-  LeaderboardOpen = false;
   FormOpen = false;
   Submited = false;
 
@@ -94,14 +102,16 @@ export class MyGameComponent implements OnInit {
     this.generate_properties = !this.generate_properties;
   }
 
-  constructor(private http: HttpClient, private LeaderboardService: LeaderboardService, private router: Router) {
+  constructor(private http: HttpClient) {
     this.OnInit();
-    // this.LeaderboardOpen = LeaderboardService.isLeaderboardOpen;
   }
 
-  showLeaderboard() {
-    this.router.navigate(['/leaderboard']);
-    // this.LeaderboardService.isLeaderboardOpen = !this.LeaderboardService.isLeaderboardOpen
+  openModal(){
+    $("#scoreModal").modal("show");
+  }
+
+  closeModal(){
+    $("#scoreModal").modal("hide");
   }
 
   submitScore(){
@@ -128,15 +138,6 @@ export class MyGameComponent implements OnInit {
 
   OnInit(){
     this.launch_game();
-    console.log("Starting")
-    // console.log("this",this.http.get("http://localhost:4200/bbb").subscribe(
-    //   res => {
-    //     console.log(res, "res");
-    //   },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // ));
   }
 
 
@@ -154,18 +155,33 @@ export class MyGameComponent implements OnInit {
 
 
     setInterval(() => {
+      let navbar = document.getElementById('navbar') as HTMLElement;
       let plane = document.getElementById('plane') as HTMLElement;
       let airport = document.getElementById('airport') as HTMLElement;
   
+      let navbar_size = navbar.getBoundingClientRect();
       let plane_size = plane.getBoundingClientRect();
       let airport_size = airport.getBoundingClientRect();
+
+      this.navbar_height = navbar_size.height;
+      // console.log(this.airport_height)
+      // console.log("planeY", this.PlaneY);
+      // console.log("max planeY", this.maxPlaneY)
 
       this.airport_height  = airport_size.height;
       this.airport_width = airport_size.width;
       this.plane_height = plane_size.height;
       this.plane_width = plane_size.width;
       this.maxPlaneX = this.airport_width - this.plane_width;
-      this.maxPlaneY = this.airport_height - this.plane_height;
+      this.maxPlaneY = this.airport_height - this.plane_height + this.navbar_height;
+      
+      // console.log(this.airport_height*this.map_units_height)
+
+      let window_height = window.innerHeight;
+      const game = document.getElementById('airport');
+      if(game){
+        game.style.height = (window_height - this.navbar_height) + 'px';
+      }
     }, 30)
 
     this.PlaneX = 0.3*this.airport_width;
@@ -173,11 +189,6 @@ export class MyGameComponent implements OnInit {
 
 
   }
-
-  // onKeyPress (event: any){
-  //   console.log("keypress")
-  
-  // }
   
  // start game button function
   StartGame() {
@@ -189,7 +200,6 @@ export class MyGameComponent implements OnInit {
     this.PlaneX = 0.3*this.airport_width;
     this.PlaneY = 0.8*this.airport_height
   }
-
 
   // stopwatch for the game
 
@@ -223,12 +233,10 @@ export class MyGameComponent implements OnInit {
     }
   }
 
-
   gameplay_movement(){
     if(this.game_start_token) {
       if(!this.game_end_token){
         this.gamecode = setInterval(() => {
-          // this.plane = document.querySelector("#plane") as HTMLElement;
           this.PlaneY -= this.SpeedY;
           this.PlaneX += this.SpeedX;
           
@@ -239,9 +247,10 @@ export class MyGameComponent implements OnInit {
           this.SpeedX = Math.min(this.SpeedX, 0.05*this.airport_width);
           this.SpeedX = Math.max(this.SpeedX, -0.05*this.airport_width);
           
+
           this.PlaneX = Math.min(this.PlaneX, this.maxPlaneX);
           this.PlaneX = Math.max(this.PlaneX, 0);
-          this.PlaneY = Math.max(this.PlaneY, 0);
+          this.PlaneY = Math.max(this.PlaneY, this.navbar_height);
           this.PlaneY = Math.min(this.PlaneY, this.maxPlaneY);
     
             // Rebound from the borders
@@ -254,7 +263,7 @@ export class MyGameComponent implements OnInit {
     
           if(this.PlaneY >= this.maxPlaneY){
             this.SpeedY = 0.;
-          }else if(this.PlaneY <= 0){
+          }else if(this.PlaneY <= this.navbar_height){
             this.SpeedY = -0.01*this.maxPlaneY;
           }
     
@@ -283,6 +292,8 @@ export class MyGameComponent implements OnInit {
       var y = ring.offsetTop;
       var width = ring.width;
       var height = ring.height;
+      // console.log(x, y, width, height);
+      // console.log(this.PlaneX, this.PlaneY)
   
       if (self.PlaneX > x - self.plane_width && self.PlaneX < x + width &&
           self.PlaneY > y - self.plane_height && self.PlaneY < y + height) {
@@ -406,6 +417,7 @@ export class MyGameComponent implements OnInit {
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === "ArrowLeft") {
       this.leftPress = true;
+      console.log("ArrowLeft")
       this.SpeedX += -0.02*this.airport_width;;
     } else if (event.key === "ArrowUp") {
       this.SpeedY = 0.02*this.airport_height;

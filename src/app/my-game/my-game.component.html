@@ -1,81 +1,124 @@
-<div class = "game"
-    [ngClass]="{'disabled': LeaderboardOpen}">
-    <div id="airport">
-        <div class="start-game"
-            *ngIf="game_start_token == false">
-            <h1>
-                Do you want to start the game?
-            </h1>
-            <p>
-                Playing on map {{Map_number}}
-            </p>
-            <button id="start-button"
-                    (click)="StartGame()"
-                    ng-model="button">
-                    Start game
-            </button>
-            <button id="leaderboard-button"
-                    (click)="showLeaderboard()"
-                    [disabled]="LeaderboardOpen">
-                    Leaderboard
-            </button>
-        </div>
-        <div class="points"
-            *ngIf="game_start_token && !game_end_token">
-            {{collected_rings}}
-        </div>
-        <div *ngIf="generate_properties">
-            <div *ngFor="let row of GameMap; index as i;">
-                <div *ngFor="let item of row.split(''); index as j;">
-                    <div *ngIf=" item == '#'"
-                        src="assets/img/enemy.png"
-                        [ngStyle]="{'top.%': i * map_units_height * 100, 'left.%' : j * map_units_width * 100}"
-                        class="enemy-area"
-                        attr.data-row="{{i}}" 
-                        attr.data-colum="{{j}}">
-                            <img src="assets/img/enemy.png"
-                            class="enemy"/>
-                    </div>
-                        <img *ngIf=" item == '$'"
-                        class='ring'
-                        src='assets/img/ring.gif'
-                        [ngStyle]="{'top.%': i * map_units_height * 100, 'left.%' : j * map_units_width * 100}"
-                        attr.data-row={{i}}
-                        attr.data-column={{j}}/>
-                    </div>
-            </div>
-        </div>
-        <div class="stopwatch"
-        *ngIf="game_start_token && !game_end_token">
-        {{minutes}}:{{seconds}}:{{milliseconds}}
-        </div>
-        <div id="plane"
-            [ngClass]="Plane_direction()"
-            [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}">
-        </div>
-        <div id="game_end_screen" *ngIf="game_end_token">
-            <div id="game_win_component" *ngIf="game_win_token">
-                <h1>You won</h1>
-                <h4>You collected all {{collected_rings}} rings.</h4>
-                <p>Your end time is {{time_string}} seconds</p>
-                <button (click)="refresh()">Restart game</button>
-                <button (click)="toggleForm()" *ngIf="!Submited">Submit time</button>
-                <div class="form-container" [ngClass]="{'hidden': !FormOpen}">
-                    <form (ngSubmit)="submitScore()">
-                        <label for="playerName">Player Name:</label>
-                        <input type="text" id="playerName" name="playerName" [(ngModel)]="playerName">
-                        <label for="timeString">Time:</label>
-                        <input type="text" id="timeString" name="timeString" [value]="time_string" readonly>                        
-                        <button type="submit">Submit Score</button>
-                    </form>        
+<div class="my-game" [ngStyle]="{'top.px': navbar_height, 'width.%': 100}">
+    <div class="container-menu start-game"
+    *ngIf="game_start_token == false">
+    <h1>
+        Do you want to start the game?
+    </h1>
+    <h4>
+        Playing on map {{Map_number}}
+    </h4>
+    <button id="start-button"
+            (click)="StartGame()"
+            class="btn btn-primary"
+            ng-model="button">
+            Start game
+    </button>
 
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+    </button>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
-            <div id="game_lose_component" *ngIf="game_lose_token">
-                <h1>You lost</h1>
-                <h4> You got {{collected_rings}} out of {{ring_count}} rings.</h4>
-                <button (click)="refresh()" id="">Restart game</button>
-            </div>
+        </div>
+    </div> -->
+    </div>
+    <div class="points"
+        *ngIf="game_start_token && !game_end_token">
+        {{collected_rings}}
+    </div>
+    <div *ngIf="generate_properties">
+        <div *ngFor="let row of GameMap; index as i;">
+            <div *ngFor="let item of row.split(''); index as j;">
+                <div *ngIf=" item == '#'"
+                    src="assets/img/enemy.png"
+                    [ngStyle]="{'top.px': navbar_height + i * airport_height*map_units_height, 'left.%' : j * map_units_width * 100}"
+                    class="enemy-area"
+                    attr.data-row="{{i}}" 
+                    attr.data-colum="{{j}}">
+                        <img src="assets/img/enemy.png"
+                        class="enemy"/>
+                </div>
+                    <img *ngIf=" item == '$'"
+                    class='ring'
+                    src='assets/img/ring.gif'
+                    [ngStyle]="{'top.px': navbar_height + i * airport_height*map_units_height, 'left.%' : j * map_units_width * 100}"
+                    attr.data-row={{i}}
+                    attr.data-column={{j}}/>
+                </div>
         </div>
     </div>
+    <div class="stopwatch"
+    *ngIf="game_start_token && !game_end_token">
+        {{minutes}}:{{seconds}}:{{milliseconds}}
+    </div>
+    <div id="plane"
+        [ngClass]="Plane_direction()"
+        [ngStyle]="{'top.px': PlaneY, 'left.px': PlaneX}">
+    </div>
+    <div id="game_end_screen" *ngIf="game_end_token" >
+        <div class="container-menu game_win_component" *ngIf="game_win_token">
+            <h1>You won</h1>
+            <h4>You collected all {{collected_rings}} rings.</h4>
+            <p>Your end time is {{time_string}} seconds</p>
+            <button (click)="refresh()" id="refresh-button" class="btn btn-primary">Restart game</button>
+
+            <button id="submit-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#scoreModal" (click)="openModal()">
+                Submit time
+            </button>
+            
+        </div>
+        <div *ngIf="game_lose_token" class="container-menu game_lose_component"> 
+            <h1>You lost</h1>
+            <h4> You got {{collected_rings}} out of {{ring_count}} rings.</h4>
+            <button (click)="refresh()" id="" class="btn btn-primary">Restart game</button>
+        </div>
+
+    </div>
+
 </div>
+<div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="scoreModalLabel">Submit Score</h5>
+        <!-- <button type="button"  class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button> -->
+        <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+        <form (ngSubmit)="submitScore()" id="add-form">
+            <div class="form-group">
+                <label for="playerName">Player Name:</label>
+                <input type="text" class="form-control" id="playerName" name="playerName" [(ngModel)]="playerName">    
+            </div>
+            <div class="form-group">
+                <label for="timeString">Time:</label>
+                <input type="text" class="form-control" id="timeString" name="timeString" [value]="time_string" readonly>
+            </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+        <button type="submit" (click)="closeModal()" form="add-form" class="btn btn-primary" data-dismiss="modal">Submit Score</button>
+        </div>
+    </div>
+    </div>
+</div>
+

@@ -1,0 +1,27 @@
+.background{
+    background-image: url("/assets/img/runway.jpg");
+    background-size: cover;
+    background-repeat: repeat-x;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    z-index: -1;
+    animation: scroll-background 20s linear infinite;
+    overflow: hidden;
+
+}
+
+@keyframes scroll-background {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -1512px 0; /* adjust this value to fit your image width */
+    }
+  }
+
+.navbar {
+  background-color: antiquewhite;
+  z-index: 250;
+}

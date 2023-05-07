@@ -13,44 +13,22 @@
     z-index: 2;
 }
 
+.my-game {
+    width: 100%;
+}
+
 .plane-right {
-    background-image: url("plane-right.png");
+    background-image: url("/assets/img/plane-right.png");
 }
 
 .plane-left {
-    background-image: url("plane-left.png");
+    background-image: url("/assets/img/plane-left.png");
 }
 
 body{
     caret-color: transparent;
     margin: 0px;
 }
-
-button{
-    border: none;
-}
-
-#airport{
-    background-image: url("runway.jpg");
-    background-size: cover;
-    background-repeat: repeat-x;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    animation: scroll-background 20s linear infinite;
-}
-
-@keyframes scroll-background {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: -1512px 0; /* adjust this value to fit your image width */
-    }
-  }
 
 .enemy-area{
     position: absolute;
@@ -77,10 +55,6 @@ button{
     height: 7.5vw;
 }
 
-.hidden{
-    display: none;
-}
-
 .points{
     position: absolute;
     font-weight: bold;
@@ -105,78 +79,7 @@ button{
     z-index: 4;
 }
 
-.start-game {
-    position: absolute;
-    display: table;
-    background-color: tan;
-    opacity: 0.8;
-    height: 40vw;
-    width: 50vw;
-    margin: auto auto auto auto;
-    left: 50%;
-    top: 50%;
-    z-index: 5;
-    transform: translate(-50%, -50%);
-    border: 1vw solid rgb(190, 124, 37);
-}
 
-.start-game #start-button {
-    font-size: 3.2vw;
-    position: absolute;
-    display: flex;
-    border: 0.3vw solid black;
-    background-color: orange;;
-    left: 75%;
-    white-space: nowrap;
-    top: 80%;
-    width: 20vw;
-    height: 10vw;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    transform: translate(-50%, -50%);
-    opacity: 1;
-    padding: 0.2vw;
-}
-
-.start-game #leaderboard-button {
-    font-size: 3.2vw;
-    position: absolute;
-    display: flex;
-    border: 0.3vw solid black;
-    background-color: orange;;
-    left: 25%;
-    top: 80%;
-    width: 20vw;
-    height: 10vw;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    transform: translate(-50%, -50%);
-    opacity: 1;
-    padding: 0.2vw;
-}
-
-.start-game h1{
-    font-size: 6vw;
-    text-align: center;
-    top: 10%;
-    left: 50%;
-    width: 90%;
-    height: 30%;
-    transform: translate(-50%, -50%);
-    position: absolute;
-}
-
-.start-game p{
-    top: 40%;
-    left: 50%;
-    width: 80%;
-    font-size: 5vw;
-    text-align: center;
-    transform: translate(-50%, -50%);
-    position: absolute;
-}
 
 .stopwatch {
     position: absolute;
@@ -189,127 +92,135 @@ button{
     z-index: 8;
 }
 
-#game_win_component{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: 50vw;
-    width: 45vw;
-    transform: translate(-50%, -50%);
+
+
+.container-menu {
     background-color: tan;
     border: 0.5vw solid rgb(190, 124, 37);
-    padding: 3vw;
-    opacity: 0.8;
-    background-image: url(win1.gif);
-    background-repeat: repeat;
-}
-
-#game_win_component h1{
-    font-size: 8vw;
-    text-align: center;
-    top: 15%;
-    left: 50%;
-    width: 90%;
-    height: 30%;
-    transform: translate(-50%, -50%);
-    position: absolute;
-}
-
-#game_win_component h4{
-    top: 30%;
-    left: 50%;
-    width: 80%;
-    font-size: 5vw;
-    text-align: center;
-    transform: translate(-50%, -50%);
-    position: absolute;
-}
-
-#game_win_component p{
-    top: 55%;
-    left: 50%;
-    width: 80%;
-    font-size: 5vw;
-    text-align: center;
-    transform: translate(-50%, -50%);
-    position: absolute;
-}
-
-#game_win_component button {
-    position: absolute;
-    top: 85%;
-    background-color: orange;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 0.5vw;
-    width : 30vw;
-    font-size: 5vw;
-    border: 1px solid rgb(190, 124, 37);
-}
-
-#game_lose_component {
     position: absolute;
     top: 50%;
     left: 50%;
-    height: 50vw;
-    width: 45vw;
+    height: 20rem;
+    width: 30rem;
     transform: translate(-50%, -50%);
-    background-color: rgb(210, 151, 140);
-    border: 0.5vw solid rgb(190, 55, 37);
     padding: 3vw;
     opacity: 0.8;
     z-index: 8;
+    border-radius: 20px;
 }
 
-#game_lose_component h1{
-    font-size: 8vw;
+.container-menu h1 {
+    font-size: 3rem;
     text-align: center;
     top: 15%;
     left: 50%;
-    width: 90%;
+    width: 95%;
     height: 30%;
     transform: translate(-50%, -50%);
     position: absolute;
 }
 
-#game_lose_component h4{
+.container-menu h4 {
     top: 35%;
     left: 50%;
     width: 80%;
-    font-size: 5vw;
+    font-size: 1.6rem;
     text-align: center;
     transform: translate(-50%, -50%);
     position: absolute;
 }
 
-#game_lose_component p{
-    top: 55%;
+.container-menu p{
+    top: 50%;
     left: 50%;
     width: 80%;
-    font-size: 5vw;
+    font-size: 1.5rem;
     text-align: center;
     transform: translate(-50%, -50%);
     position: absolute;
 }
 
-#game_lose_component button {
+.container-menu button{
     position: absolute;
-    top: 80%;
-    background-color: rgb(193, 0, 0);
-    left: 50%;
+    top: 85%;
+    background-color: orange;
+    /* left: 50%; */
     transform: translate(-50%, -50%);
     padding: 0.5vw;
-    width : 30vw;
-    font-size: 5vw;
-    border: 1px solid rgb(124, 4, 4);
+    width : 12.5rem;
+    font-size: 1.75rem;
+    border-radius: 15px;
+    border: 0.15rem solid rgb(190, 124, 37);
 }
 
-.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
+#refresh-button {
+    left :25%;
+}
 
-  #form-container {
+#submit-button {
+    left: 75%;
+}
+
+#form-container {
+    position: absolute;
     background-color: aliceblue;
     border: #963939 1px solid;
+    
+}
+
+.game_lose_component {
+    background-color: rgb(210, 151, 140);
+    border: 0.5vw solid rgb(190, 55, 37);
+}
+.game_win_component{
+    background-color: tan;
+    border: 0.5vw solid rgb(190, 124, 37);
+    background-image: url("/assets/img/win1.gif");
+    background-repeat: repeat;
+}
+
+.game_win_component h1 {
+    font-size: 4rem;
+}
+
+.game_win_component h4{
+    top: 32.5%;
+    font-size: 2.1rem;
+
+}
+
+.game_win_component p {
+    top: 60%;
+    font-size: 1.8rem;
+}
+
+.game_lose_component h1{
+    font-size: 5rem;
+}
+
+.game_lose_component h4{
+    top: 50%;
+    font-size: 3rem;
+}
+
+.game_lose_component button {
+    left: 50%;
+    font-size: 2.5rem;
+    width: 20rem;
+    border-radius: 15px;
+    background-color: rgb(216, 0, 0);
+    border: 1px solid rgb(84, 3, 3);
+    color: black;
+}
+
+.start-game h4{
+    top: 50%;
+}
+
+.start-game button {
+    font-size: 2.5rem;
+    left: 50%;
+    white-space: nowrap;
+    top: 80%;
+    width: 15rem;
 }

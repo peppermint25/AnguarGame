@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { MyGameComponent } from './my-game/my-game.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +21,8 @@ import { LeaderboardComponent } from './leaderboard/leaderboard.component';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent, MyGameComponent],

@@ -1,22 +1,22 @@
-<div class="leaderboard-container">
-
-    <h1>Leaderboard</h1>
-    <table>
-        <thead class="leaderboard-head">
+  <div class="leaderboard-container text-center">
+      <h1>Leaderboard</h1>
+      <table class="table table-hover">
+        <thead class="leaderboard-head1">
           <tr>
             <th>Rank</th>
             <th>Username</th>
             <th>Game Time</th>
+            <th></th>
           </tr>
         </thead>
-        <tbody class="leaderboard-body">
+        <tbody class="leaderboard-body1">
           <tr *ngFor="let player of players_list; let i = index" class="leaderboard-row">
             <td>{{i+1}}</td>
             <td>{{player.username}}</td>
             <td>{{player.gametime}}</td>
+            <td><button class="btn btn-danger" (click)="deleteEntry(player._id.$oid)">Delete</button></td>
           </tr>
         </tbody>
       </table>
+  </div>
 
-    <button class="btn btn-primary" (click)="closeLeaderboard()">Close</button>
-</div>
