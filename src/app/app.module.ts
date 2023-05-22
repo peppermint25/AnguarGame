@@ -9,12 +9,16 @@ import { MyGameComponent } from './my-game/my-game.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MyGameComponent,
     LeaderboardComponent,
+    LoginComponent,
+    RegisterComponent,
 
   ],
   imports: [

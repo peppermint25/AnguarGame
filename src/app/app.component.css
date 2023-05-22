@@ -25,3 +25,7 @@
   background-color: antiquewhite;
   z-index: 250;
 }
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
